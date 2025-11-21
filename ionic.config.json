@@ -1,0 +1,7 @@
+{
+  "name": "IOT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
