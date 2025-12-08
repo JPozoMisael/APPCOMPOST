@@ -1,0 +1,87 @@
+.main-header {
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #111827;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: #22a45d;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .notif-btn {
+    position: relative;
+  }
+
+  .notif-btn ion-icon {
+    font-size: 1.4rem;
+  }
+
+  .notif-badge {
+    position: absolute;
+    top: 2px;
+    right: -2px;
+    font-size: 0.6rem;
+    border-radius: 999px;
+  }
+}
+
+/* Popover de notificaciones */
+.notif-popover {
+  ion-list {
+    padding-top: 4px;
+  }
+
+  ion-item.no-leida {
+    --background: #ecfdf3;
+  }
+
+  ion-item h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  ion-item p {
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+
+  ion-item p.fecha {
+    font-size: 0.7rem;
+    color: #9ca3af;
+  }
+
+  .notif-empty {
+    padding: 16px;
+    text-align: center;
+    color: #6b7280;
+
+    ion-icon {
+      font-size: 2rem;
+      margin-bottom: 4px;
+      color: #16a34a;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.user-menu {
+  ion-list {
+    padding-top: 4px;
+  }
+}

@@ -1,3 +1,113 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <!-- Shell con menú lateral SOLO cuando showShell = true -->
+  <ng-container *ngIf="showShell; else simpleOutlet">
+    <ion-split-pane when="false" contentId="main">
+      <!-- MENÚ LATERAL -->
+      <ion-menu
+        menuId="mainMenu"
+        contentId="main"
+        type="overlay"
+      >
+        <ion-header>
+          <ion-toolbar color="light">
+            <ion-title>Plataforma IoT Compost</ion-title>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+          <ion-list lines="none">
+            <!-- Cabecera usuario -->
+            <ion-item>
+              <ion-avatar slot="start">
+                <div class="avatar-circle">{{ iniciales }}</div>
+              </ion-avatar>
+              <ion-label>
+                <h2>{{ nombreUsuario }}</h2>
+                <p>{{ rolUsuario | titlecase }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item-divider></ion-item-divider>
+
+            <!-- Páginas básicas (todos los roles logueados) -->
+            <ion-menu-toggle auto-hide="false">
+              <ion-item routerLink="/dashboard" routerDirection="root">
+                <ion-icon name="speedometer-outline" slot="start"></ion-icon>
+                <ion-label>Dashboard</ion-label>
+              </ion-item>
+
+              <ion-item routerLink="/monitoreo" routerDirection="root">
+                <ion-icon name="toggle-outline" slot="start"></ion-icon>
+                <ion-label>Monitoreo</ion-label>
+              </ion-item>
+
+              <ion-item routerLink="/graficas" routerDirection="root">
+                <ion-icon name="stats-chart-outline" slot="start"></ion-icon>
+                <ion-label>Gráficas</ion-label>
+              </ion-item>
+
+              <!-- 🔁 Nueva página: Historial -->
+              <ion-item routerLink="/historial" routerDirection="root">
+                <ion-icon name="time-outline" slot="start"></ion-icon>
+                <ion-label>Historial</ion-label>
+              </ion-item>
+
+              <ion-item routerLink="/perfil" routerDirection="root">
+                <ion-icon name="id-card-outline" slot="start"></ion-icon>
+                <ion-label>Perfil</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <!-- 🔬 Funcionalidad INVESTIGADOR (técnico-investigador + admin) -->
+            <ion-item-divider *ngIf="esInvestigador || esAdmin"></ion-item-divider>
+
+            <ion-menu-toggle auto-hide="false" *ngIf="esInvestigador || esAdmin">
+              <ion-item routerLink="/explorador-datos" routerDirection="root">
+                <ion-icon name="analytics-outline" slot="start"></ion-icon>
+                <ion-label>Explorador de datos</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <!-- Opciones solo admin -->
+            <ion-item-divider *ngIf="esAdmin"></ion-item-divider>
+
+            <ion-menu-toggle auto-hide="false" *ngIf="esAdmin">
+              <ion-item routerLink="/admin-usuarios" routerDirection="root">
+                <ion-icon name="people-outline" slot="start"></ion-icon>
+                <ion-label>Usuarios y roles</ion-label>
+              </ion-item>
+
+              <ion-item routerLink="/parametros-proceso" routerDirection="root">
+                <ion-icon name="settings-outline" slot="start"></ion-icon>
+                <ion-label>Parámetros del proceso</ion-label>
+              </ion-item>
+
+              <ion-item routerLink="/admin-auditoria" routerDirection="root">
+                <ion-icon name="receipt-outline" slot="start"></ion-icon>
+                <ion-label>Auditoría / Logs</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <ion-item-divider></ion-item-divider>
+
+            <!-- Logout -->
+            <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="logout()">
+                <ion-icon name="log-out-outline" slot="start"></ion-icon>
+                <ion-label color="danger">Cerrar sesión</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+
+      <!-- CONTENIDO PRINCIPAL CON MENÚ -->
+      <ion-router-outlet id="main"></ion-router-outlet>
+    </ion-split-pane>
+  </ng-container>
+
+  <!-- Outlet simple (sin menú) para /auth, /registro, etc. -->
+  <ng-template #simpleOutlet>
+    <ion-router-outlet></ion-router-outlet>
+  </ng-template>
 </ion-app>

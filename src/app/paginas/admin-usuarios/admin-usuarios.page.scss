@@ -1,0 +1,356 @@
+.usuarios-content.theme-light {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-soft: #eef2ff;
+  --border: #d1d5db;
+  --text: #111827;
+  --muted: #6b7280;
+
+  --primary: #22a45d;
+  --primary-soft: rgba(34, 164, 93, 0.08);
+  --danger: #dc2626;
+
+  --radius-lg: 18px;
+  --shadow-lg: 0 14px 30px rgba(15, 23, 42, 0.12);
+
+  background: var(--bg);
+}
+
+.page-wrapper {
+  padding: 16px 20px 24px;
+  background: var(--bg);
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--text);
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.top-left h1 {
+  margin: 0 0 4px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.top-left .subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  max-width: 640px;
+}
+
+.top-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.searchbar {
+  --background: var(--surface);
+  --color: var(--text);
+  --placeholder-color: var(--muted);
+  --icon-color: var(--muted);
+  --border-radius: 999px;
+  --box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.counter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 500;
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--primary);
+  }
+}
+
+/* ===== MENSAJES GLOBALES ===== */
+.global-state {
+  margin-bottom: 10px;
+}
+
+.state-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.state-item.error {
+  color: var(--danger);
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1.8fr);
+  gap: 18px;
+}
+
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(15, 23, 42, 0.04);
+
+  ion-card-header {
+    padding-bottom: 6px;
+  }
+
+  ion-card-subtitle {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  ion-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+}
+
+/* Header interno de paneles */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: #e5e7eb;
+  color: #374151;
+
+  ion-icon {
+    font-size: 0.9rem;
+  }
+}
+
+.mode-create {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.mode-edit {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+}
+
+/* ===== FORM PANEL ===== */
+.form-panel ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+.form-panel .rol-item {
+  margin-top: 4px;
+}
+
+.form-helper {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Botones formulario */
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-actions ion-button {
+  --background: var(--primary);
+  --background-hover: #1b874d;
+  --background-activated: #1b874d;
+  --border-radius: 999px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --box-shadow: 0 6px 18px rgba(34, 197, 94, 0.25);
+  font-weight: 600;
+  font-size: 0.88rem;
+  height: 40px;
+}
+
+.link-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: #4b5563;
+}
+
+/* ===== LIST PANEL / TABLA ===== */
+.list-panel .table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.list-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.list-panel thead {
+  background: var(--surface-soft);
+}
+
+.list-panel th {
+  text-align: left;
+  font-weight: 600;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.list-panel tbody tr {
+  transition: background 0.15s ease;
+
+  &:nth-child(even) {
+    background: #f9fafb;
+  }
+
+  &:hover {
+    background: rgba(34, 197, 94, 0.06);
+  }
+}
+
+.list-panel td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.list-panel .acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Pills de rol */
+.rol-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.rol-administrador {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.rol-tecnico {
+  background: rgba(37, 99, 235, 0.09);
+  color: #2563eb;
+}
+
+.rol-estandar {
+  background: rgba(148, 163, 184, 0.2);
+  color: #475569;
+}
+
+/* Botones de icono */
+.icon-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  margin-left: 4px;
+  transition: background 0.15s ease, transform 0.12s ease;
+
+  ion-icon {
+    font-size: 1.1rem;
+    color: #4b5563;
+  }
+
+  &:hover {
+    background: rgba(148, 163, 184, 0.22);
+    transform: translateY(-1px);
+  }
+
+  &.danger ion-icon {
+    color: var(--danger);
+  }
+
+  &.danger:hover {
+    background: rgba(220, 38, 38, 0.12);
+  }
+}
+
+/* Estado vacío */
+.state-text {
+  margin: 6px 2px 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.state-text.muted {
+  color: var(--muted);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 960px) {
+  .layout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .top-bar {
+    flex-direction: column;
+  }
+
+  .top-right {
+    align-items: stretch;
+    min-width: 0;
+  }
+
+  .counter-pill {
+    align-self: flex-start;
+  }
+}

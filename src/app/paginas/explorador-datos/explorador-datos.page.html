@@ -1,0 +1,136 @@
+<app-main-header titulo="Explorador de datos"></app-main-header>
+
+<ion-content class="dashboard-content theme-light">
+  <div class="page-wrapper">
+
+    <!-- Filtros -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Filtros de consulta</ion-card-title>
+        <ion-card-subtitle>
+          Elige rango de fechas y variables para analizar los datos históricos.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="filtros-grid">
+          <!-- Rango -->
+          <ion-item lines="none">
+            <ion-label>Rango</ion-label>
+            <ion-select [(ngModel)]="rango" (ionChange)="onRangoChange()">
+              <ion-select-option value="24h">Últimas 24 horas</ion-select-option>
+              <ion-select-option value="7d">Últimos 7 días</ion-select-option>
+              <ion-select-option value="30d">Últimos 30 días</ion-select-option>
+              <ion-select-option value="custom">Personalizado</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Fechas personalizadas -->
+          <ng-container *ngIf="rango === 'custom'">
+            <ion-item lines="none">
+              <ion-label position="stacked">Desde</ion-label>
+              <ion-datetime
+                presentation="date"
+                [(ngModel)]="fechaDesde"
+                (ionChange)="onFechaChange()">
+              </ion-datetime>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label position="stacked">Hasta</ion-label>
+              <ion-datetime
+                presentation="date"
+                [(ngModel)]="fechaHasta"
+                (ionChange)="onFechaChange()">
+              </ion-datetime>
+            </ion-item>
+          </ng-container>
+
+          <!-- Variables -->
+          <ion-item lines="none" class="variables-item">
+            <ion-label>Variables</ion-label>
+            <ion-checkbox
+              slot="end"
+              justify="space-between"
+              [(ngModel)]="mostrarTemp"
+              (ionChange)="onVariablesChange()">
+              Temperatura
+            </ion-checkbox>
+          </ion-item>
+          <ion-item lines="none" class="variables-item">
+            <ion-label></ion-label>
+            <ion-checkbox
+              slot="end"
+              justify="space-between"
+              [(ngModel)]="mostrarHum"
+              (ionChange)="onVariablesChange()">
+              Humedad
+            </ion-checkbox>
+          </ion-item>
+          <ion-item lines="none" class="variables-item">
+            <ion-label></ion-label>
+            <ion-checkbox
+              slot="end"
+              justify="space-between"
+              [(ngModel)]="mostrarNH3"
+              (ionChange)="onVariablesChange()">
+              NH₃
+            </ion-checkbox>
+          </ion-item>
+          <ion-item lines="none" class="variables-item">
+            <ion-label></ion-label>
+            <ion-checkbox
+              slot="end"
+              justify="space-between"
+              [(ngModel)]="mostrarCH4"
+              (ionChange)="onVariablesChange()">
+              CH₄
+            </ion-checkbox>
+          </ion-item>
+        </div>
+
+        <!-- Botones de exportación -->
+        <div class="actions-row">
+          <ion-button
+            size="small"
+            fill="outline"
+            (click)="exportCSV()"
+            [disabled]="!datosFiltrados.length">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            Exportar CSV
+          </ion-button>
+
+          <ion-button
+            size="small"
+            fill="solid"
+            color="dark"
+            (click)="exportPDF()"
+            [disabled]="!datosFiltrados.length">
+            <ion-icon name="document-outline" slot="start"></ion-icon>
+            Informe PDF
+          </ion-button>
+        </div>
+
+        <ion-text color="medium" *ngIf="!datosFiltrados.length && !cargando">
+          <p class="ion-padding-top">
+            No hay datos en el rango seleccionado. Ajusta los filtros o espera nuevas lecturas.
+          </p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Gráfica -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Gráfico histórico</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="chart-container">
+          <canvas #explorerChart></canvas>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

@@ -1,0 +1,207 @@
+<app-main-header titulo="Gráficas en tiempo real"></app-main-header>
+
+<ion-content class="graficas-content theme-dark">
+  <!-- Encabezado local de la página -->
+  <div class="top-header">
+    
+    <p class="subtitle">
+      Visualiza las variables clave de la compostera en tiempo real y exporta los resultados.
+    </p>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- ========== FILA SUPERIOR: VARIABLES, RANGO, SUAVIZADO ========== -->
+    <ion-card class="filters-card glassy">
+      <!-- Botón flotante PDF -->
+      <ion-button
+        class="pdf-fab"
+        fill="solid"
+        size="small"
+        (click)="exportarPDF()"
+      >
+        <ion-icon name="document-text-outline" slot="start"></ion-icon>
+        PDF
+      </ion-button>
+
+      <ion-card-content>
+
+        <!-- Chips de variables -->
+        <div class="vars-row">
+          <div class="vars-title">
+            Variables
+          </div>
+          <div class="vars-chips">
+            <ion-chip
+              *ngFor="let v of variables"
+              (click)="setVariable(v.key)"
+              [class.chip-active]="v.key === variableSeleccionada.key"
+              outline="true"
+            >
+              <ion-label>{{ v.label }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+
+        <!-- Rango + Suavizado + Exportaciones -->
+        <div class="filters-row">
+          <!-- Rango -->
+          <div class="filter-block">
+            <div class="filter-label">Rango de tiempo</div>
+            <ion-segment
+              class="range-segment"
+              [value]="rangoSeleccionado"
+              (ionChange)="cambiarRango($event.detail.value)"
+            >
+              <ion-segment-button value="15m">
+                <ion-label>15 min</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="1h">
+                <ion-label>1 h</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="24h">
+                <ion-label>24 h</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="all">
+                <ion-label>Todo</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+
+          <!-- Suavizado -->
+          <div class="filter-block small">
+            <div class="filter-label">Suavizado</div>
+            <div class="toggle-row">
+              <ion-toggle
+                [checked]="suavizado"
+                (ionChange)="toggleSuavizado($event.detail.checked)"
+              ></ion-toggle>
+              <span>{{ suavizado ? 'Suave' : 'Bruto' }}</span>
+            </div>
+          </div>
+
+          <!-- Exportar (PNG / ZIP) -->
+          <div class="filter-block export-block">
+            <div class="filter-label">Exportar</div>
+            <div class="export-row">
+              <ion-button size="small" fill="outline" (click)="descargarPNG(0)">
+                <ion-icon name="download-outline" slot="start"></ion-icon>
+                Línea
+              </ion-button>
+              <ion-button size="small" fill="outline" (click)="descargarPNG(1)">
+                <ion-icon name="download-outline" slot="start"></ion-icon>
+                Barras
+              </ion-button>
+              <ion-button size="small" fill="outline" (click)="descargarPNG(2)">
+                <ion-icon name="download-outline" slot="start"></ion-icon>
+                Gauge
+              </ion-button>
+              <ion-button size="small" fill="solid" (click)="descargarGraficas()">
+                <ion-icon name="archive-outline" slot="start"></ion-icon>
+                ZIP
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-helper">
+          Variable: <strong>{{ variableSeleccionada.label }}</strong> ({{ unidad() }}) —
+          Rango: <strong>{{ nombreRango(rangoSeleccionado) }}</strong>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ========== MENSAJES DE ESTADO ========== -->
+    <div class="state-row" *ngIf="mensaje">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <span>{{ mensaje }}</span>
+    </div>
+
+    <!-- ========== KPIs ========== -->
+    <div class="kpi-grid" *ngIf="kpis">
+      <ion-card class="kpi-card glassy">
+        <ion-card-content>
+          <div class="kpi-label">Actual</div>
+          <div class="kpi-value">
+            {{ kpis.actual | number:'1.0-1' }} {{ unidad() }}
+          </div>
+          <div class="kpi-hint">Lectura más reciente</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="kpi-card glassy">
+        <ion-card-content>
+          <div class="kpi-label">Mínimo</div>
+          <div class="kpi-value">
+            {{ kpis.min | number:'1.0-1' }} {{ unidad() }}
+          </div>
+          <div class="kpi-hint">Valor mínimo del rango</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="kpi-card glassy">
+        <ion-card-content>
+          <div class="kpi-label">Máximo</div>
+          <div class="kpi-value">
+            {{ kpis.max | number:'1.0-1' }} {{ unidad() }}
+          </div>
+          <div class="kpi-hint">Valor máximo del rango</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="kpi-card glassy">
+        <ion-card-content>
+          <div class="kpi-label">Promedio</div>
+          <div class="kpi-value">
+            {{ kpis.promedio | number:'1.0-1' }} {{ unidad() }}
+          </div>
+          <div class="kpi-hint">Media en el rango</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- ========== GRID DE GRÁFICAS ========== -->
+    <div class="charts-grid" *ngIf="!mensaje && kpis">
+      <!-- Línea -->
+      <ion-card class="chart-card glassy">
+        <ion-card-header>
+          <ion-card-subtitle>Tendencia temporal</ion-card-subtitle>
+          <ion-card-title>Serie histórica</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-wrapper">
+            <canvas #lineCanvas></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Barras -->
+      <ion-card class="chart-card glassy">
+        <ion-card-header>
+          <ion-card-subtitle>Comparación</ion-card-subtitle>
+          <ion-card-title>Valores por instante</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-wrapper">
+            <canvas #barCanvas></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Gauge -->
+      <ion-card class="chart-card glassy">
+        <ion-card-header>
+          <ion-card-subtitle>Valor actual</ion-card-subtitle>
+          <ion-card-title>Indicador de estado</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-wrapper gauge-wrapper">
+            <canvas #gaugeCanvas></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,79 @@
+.notif-page-content {
+  --background: none;
+  color: #111827;
+
+  background:
+    radial-gradient(circle at 0 0, rgba(190, 242, 200, 0.18), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(254, 252, 191, 0.18), transparent 55%),
+    #f5f7f2;
+}
+
+.page-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 12px 28px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.page-header .subtitle {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+ion-segment {
+  margin-bottom: 12px;
+}
+
+.notif-list ion-card {
+  margin-bottom: 12px;
+  border-radius: 16px;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+}
+
+.notif-list ion-card.no-leida {
+  border: 1px solid #16a34a;
+  background: #ecfdf3;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notif-header .fecha {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.notif-empty-page {
+  margin-top: 40px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.notif-empty-page ion-icon {
+  font-size: 2.5rem;
+  color: #16a34a;
+  margin-bottom: 8px;
+}
+
+.notif-empty-page h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}

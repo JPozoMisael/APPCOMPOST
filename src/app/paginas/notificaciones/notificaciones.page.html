@@ -1,0 +1,87 @@
+<app-main-header titulo="Notificaciones"></app-main-header>
+
+<ion-content class="notif-page-content">
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div>
+        <h1>Notificaciones</h1>
+        <p class="subtitle">
+          Historial de alertas y mensajes generados por el proceso de compostaje.
+        </p>
+      </div>
+
+      <ion-button
+  size="small"
+  fill="clear"
+  (click)="marcarTodasComoLeidas()"
+  *ngIf="hayNoLeidas"
+>
+  <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+  Marcar todas como leídas
+</ion-button>
+
+    </div>
+
+    <ion-segment [(ngModel)]="filtro">
+      <ion-segment-button value="todas">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="criticas">
+        <ion-label>Críticas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="proceso">
+        <ion-label>Proceso</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="informativas">
+        <ion-label>Informativas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div class="notif-list" *ngIf="notificacionesFiltradas.length; else noNotif">
+      <ion-card
+        *ngFor="let n of notificacionesFiltradas"
+        [class.no-leida]="!n.leida"
+      >
+        <ion-card-header>
+          <div class="notif-header">
+            <ion-chip
+              [color]="
+                n.tipo === 'critica'
+                  ? 'danger'
+                  : n.tipo === 'proceso'
+                  ? 'success'
+                  : 'medium'
+              "
+            >
+              <ion-icon
+                [name]="
+                  n.tipo === 'critica'
+                    ? 'warning-outline'
+                    : n.tipo === 'proceso'
+                    ? 'leaf-outline'
+                    : 'information-circle-outline'
+                "
+              ></ion-icon>
+              <ion-label>{{ n.tipo | titlecase }}</ion-label>
+            </ion-chip>
+            <span class="fecha">{{ n.fecha }}</span>
+          </div>
+          <ion-card-title>{{ n.titulo }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p>{{ n.mensaje }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ng-template #noNotif>
+      <div class="notif-empty-page">
+        <ion-icon name="leaf-outline"></ion-icon>
+        <h2>No hay notificaciones</h2>
+        <p>Cuando ocurra algo relevante en tu compostera, aparecerá aquí.</p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

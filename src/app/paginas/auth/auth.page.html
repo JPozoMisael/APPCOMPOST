@@ -1,0 +1,112 @@
+<ion-content class="login-content ion-no-padding" fullscreen>
+
+  <div class="auth-shell">
+
+    <!-- ====================== HERO IZQUIERDO ====================== -->
+    <section class="hero-side">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="brand-pill">
+          <span class="dot"></span>
+          Plataforma IoT Compost
+        </div>
+
+        <h1>
+          Monitorea tu compostaje<br />
+          en tiempo real
+        </h1>
+
+        <p>
+          Temperatura, humedad y gases monitoreados 24/7 con análisis inteligente
+          y control de actuadores donde te encuentres.
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================== FORMULARIO ====================== -->
+    <section class="form-side">
+      <ion-card class="login-card">
+        <ion-card-content>
+
+          <!-- Cabecera con logo -->
+          <div class="form-header">
+            <div class="form-logo">
+              <img src="assets/img/logo2.png" />
+            </div>
+
+            <h2 class="form-title">Iniciar sesión</h2>
+            <p class="form-subtitle">Accede a tu plataforma IoT Compost</p>
+          </div>
+
+          <!-- Mensaje de error -->
+          <ion-text color="danger" *ngIf="errorMsg">
+            <p class="ion-text-center error-text">{{ errorMsg }}</p>
+          </ion-text>
+
+          <!-- Formulario -->
+          <form (ngSubmit)="onSubmit($event)" novalidate>
+
+            <ion-item class="input-item">
+              <ion-icon slot="start" name="mail-outline"></ion-icon>
+              <ion-input
+                type="email"
+                placeholder="Correo electrónico"
+                [(ngModel)]="credentials.email"
+                name="email"
+                autocomplete="email"
+                inputmode="email"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item class="input-item password-item">
+              <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+              <ion-input
+                [type]="verPassword ? 'text' : 'password'"
+                placeholder="Contraseña"
+                [(ngModel)]="credentials.password"
+                name="password"
+                required
+                autocomplete="current-password">
+              </ion-input>
+
+              <ion-button
+                type="button"
+                fill="clear"
+                slot="end"
+                (click)="togglePassword()"
+                class="toggle-btn">
+                <ion-icon
+                  [name]="verPassword ? 'eye-off-outline' : 'eye-outline'">
+                </ion-icon>
+              </ion-button>
+            </ion-item>
+
+            <ion-button
+              class="btn-login"
+              expand="block"
+              type="submit"
+              [disabled]="cargando">
+              <ion-icon name="log-in-outline" slot="start"></ion-icon>
+              {{ cargando ? 'Ingresando…' : 'Ingresar' }}
+            </ion-button>
+          </form>
+
+          <!-- Links -->
+          <div class="auth-links">
+            <span>
+              ¿No tienes cuenta?
+              <a (click)="irARegistro()">Regístrate</a>
+            </span>
+            <br />
+            <a (click)="recuperarClave()">¿Olvidaste tu contraseña?</a>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+  </div>
+
+</ion-content>

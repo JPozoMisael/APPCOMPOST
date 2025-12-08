@@ -1,0 +1,100 @@
+ion-content {
+  --background: #f3f4f6;
+  color: #111827;
+}
+
+/* Contenedor centrado */
+.registro-container {
+  min-height: calc(100vh - 56px); // restamos la toolbar aprox
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+/* Tarjeta principal */
+ion-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 18px;
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.16);
+  border: 1px solid rgba(209, 213, 219, 0.9);
+}
+
+ion-card-header {
+  padding-bottom: 8px;
+}
+
+ion-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Inputs y selects */
+ion-item {
+  --background: #ffffff;
+  --min-height: 52px;
+  border-radius: 14px;
+  margin-top: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+ion-item.ion-invalid.ion-touched {
+  border-color: #ef4444;
+}
+
+/* Icono de mostrar/ocultar contraseña */
+.toggle-icon {
+  font-size: 22px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+/* Botón principal */
+ion-button.ion-margin-top {
+  margin-top: 18px;
+  --border-radius: 999px;
+  --background: #22c55e;
+  --background-activated: #16a34a;
+}
+
+/* Texto inferior */
+ion-text {
+  display: block;
+  margin-top: 14px;
+
+  p {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Toolbar acorde al estilo claro */
+ion-header,
+ion-toolbar {
+  --background: #ffffff;
+  --color: #111827;
+  box-shadow: 0 1px 0 rgba(209, 213, 219, 0.8);
+}
+
+/* Responsive: en pantallas pequeñas damos algo más de aire */
+@media (max-width: 600px) {
+  .registro-container {
+    align-items: flex-start;
+    padding-top: 24px;
+  }
+
+  ion-card {
+    max-width: 100%;
+  }
+}

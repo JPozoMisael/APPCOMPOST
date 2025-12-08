@@ -1,0 +1,261 @@
+/* ================== WRAPPER GENERAL ================== */
+
+.diagram-wrapper {
+  border-radius: 18px;
+  padding: 0.75rem 1rem 1rem;
+  border: 1px dashed rgba(148, 163, 184, 0.7);
+  background: radial-gradient(circle at top left, #f9fafb, #e5e7eb);
+}
+
+.diagram-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.4rem;
+
+  .hint {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+}
+
+.diagram-svg {
+  width: 100%;
+  max-height: 420px;
+  display: block;
+}
+
+/* ================== TIPOGRAFÍA BASE ================== */
+
+.node-title {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #111827;
+}
+
+.node-text {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 11px;
+  fill: #374151;
+}
+
+.state-text {
+  font-weight: 700;
+}
+
+.reading-value {
+  font-weight: 600;
+  fill: #111827;
+}
+
+/* ================== PANEL GENÉRICO (cards) ================== */
+
+.node .panel {
+  fill: #ffffff;
+  stroke: #e5e7eb;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.12));
+  transition:
+    stroke 0.18s ease-out,
+    filter 0.18s ease-out,
+    fill 0.18s ease-out;
+}
+
+.node.on .panel {
+  stroke: #22c55e;
+  filter: drop-shadow(0 0 0 1px rgba(34, 197, 94, 0.55));
+}
+
+/* Hover suave (sin movimientos) para cualquier tarjeta .node */
+.node:hover .panel {
+  stroke: #22c55e;
+  filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.22));
+}
+
+.node:hover .state-text {
+  fill: #16a34a;
+}
+
+/* ================== MOTOR PASO A PASO ================== */
+
+.stepper-disc {
+  fill: #e5e7eb;
+  stroke: #9ca3af;
+  stroke-width: 2;
+}
+
+.stepper-center {
+  fill: #9ca3af;
+}
+
+.stepper-node.node.on .stepper-disc {
+  stroke: #22c55e;
+}
+
+/* ================== SENSORES DE HUMEDAD DEL SUELO ================== */
+
+.soil-probe rect {
+  fill: #f9fafb;
+  stroke: #6b7280;
+  stroke-width: 1.6;
+}
+
+.soil-probe line {
+  stroke: #6b7280;
+  stroke-width: 1.6;
+}
+
+.soil-label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 10px;
+  fill: #4b5563;
+}
+
+/* ================== COMPOSTERA ================== */
+
+.tolva-title {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #111827;
+}
+
+/* cuerpo principal de la compostera */
+.tolva-group rect {
+  transition:
+    stroke 0.18s ease-out,
+    filter 0.18s ease-out;
+}
+
+/* hover suave en compostera (borde resaltado) */
+.tolva-group:hover rect {
+  stroke: #16a34a;
+  filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.25));
+}
+
+/* Sonar / nivel (caja verde de arriba) */
+
+.sonar-box {
+  fill: #0f172a;
+  stroke: #22c55e;
+  stroke-width: 1.3;
+}
+
+.sonar-circle {
+  fill: #e5e7eb;
+  stroke: #22c55e;
+  stroke-width: 1.2;
+}
+
+.sonar-label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 9px;
+  fill: #4b5563;
+}
+
+/* ================== ESCOTILLAS / SERVOS ================== */
+
+.escotilla .esc-panel {
+  fill: #fb923c;
+  stroke: #ea580c;
+  stroke-width: 1.2;
+  filter: drop-shadow(0 2px 4px rgba(148, 27, 11, 0.35));
+  transition:
+    filter 0.18s ease-out,
+    opacity 0.18s ease-out;
+}
+
+.escotilla .esc-text,
+.escotilla .esc-state {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 11px;
+  fill: #fefce8;
+}
+
+.escotilla:not(.on) .esc-panel {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}
+
+.escotilla:not(.on) .esc-state {
+  fill: #fee2e2;
+}
+
+/* Hover: más brillo, sin mover nada */
+.escotilla:hover .esc-panel {
+  filter: drop-shadow(0 4px 10px rgba(248, 113, 113, 0.6));
+}
+
+.escotilla:hover .esc-state {
+  fill: #fff7ed;
+}
+
+/* ================== RELÉS + LEDs (VENTILADORES / VÁLVULA) ================== */
+
+.relay-box {
+  fill: #0f172a;
+  stroke: #38bdf8;
+  stroke-width: 1.3;
+}
+
+.led-outline {
+  stroke: rgba(15, 23, 42, 0.4);
+  stroke-width: 1;
+}
+
+/* Las tarjetas de actuadores (electroválvula + ventiladores) */
+.actuator-card {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.actuator-card:hover .panel {
+  stroke: #22c55e;
+  filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.25));
+}
+
+/* ================== GAS SENSORS + DHT22 ================== */
+
+.gas-probe rect {
+  fill: #f9fafb;
+  stroke: #6b7280;
+  stroke-width: 2;
+}
+
+.gas-probe line {
+  stroke: #6b7280;
+  stroke-width: 2;
+}
+
+.gas-label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 10px;
+  fill: #4b5563;
+}
+
+.dht-body {
+  fill: #f9fafb;
+  stroke: #9ca3af;
+  stroke-width: 1.4;
+}
+
+.dht-label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 10px;
+  fill: #4b5563;
+}
+
+/* ================== BLOQUE LECTURAS ================== */
+
+.readings-node .panel {
+  stroke: #cbd5e1;
+}
+
+.readings-node .node-title {
+  font-size: 12px;
+}
+
+.readings-node:hover .panel {
+  stroke: #22c55e;
+  filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.25));
+}

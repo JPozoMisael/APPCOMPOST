@@ -1,0 +1,145 @@
+/* =========================
+   APP SHELL / MENÚ LATERAL ECO
+   ========================= */
+
+/* Fondo general del app */
+ion-app {
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.7), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(211, 236, 211, 0.6), transparent 55%),
+    linear-gradient(135deg, #edf2ea 0%, #f4f7f1 100%);
+}
+
+/* MENÚ LATERAL */
+ion-menu {
+  --width: 270px;
+  --ion-background-color: transparent;
+}
+
+/* Header del menú */
+ion-menu ion-header ion-toolbar {
+  --background: linear-gradient(90deg, #276749, #38a169);
+  --color: #f0fff4;
+}
+
+ion-menu ion-header ion-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* Contenido del menú */
+ion-menu ion-content {
+  --background:
+    radial-gradient(circle at 0 0, rgba(154, 230, 180, 0.15), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(254, 252, 191, 0.15), transparent 60%),
+    #f3f6f1;
+}
+
+/* Lista interior */
+ion-menu ion-list {
+  padding: 8px 0 14px;
+}
+
+/* ========= Cabecera de usuario ========= */
+
+ion-menu ion-item:first-child {
+  --background: transparent;
+  margin: 0 10px 4px;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(163, 177, 163, 0.6);
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #9ae6b4 0, #22543d 70%);
+  color: #f0fff4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 17px;
+}
+
+ion-menu ion-item:first-child ion-label h2 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #143423;
+}
+
+ion-menu ion-item:first-child ion-label p {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7b6b;
+}
+
+/* ========= Divisores ========= */
+
+ion-item-divider {
+  --background: transparent;
+  min-height: 18px;
+  margin: 8px 10px 2px;
+  border-bottom: 1px dashed rgba(163, 177, 163, 0.9);
+}
+
+/* ========= Items de menú (TODOS IGUALES) ========= */
+
+ion-menu-toggle ion-item {
+  --background: transparent;
+  --color: #143423;
+  margin: 2px 8px;
+  padding-inline-start: 10px;
+  padding-inline-end: 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  transition: background 0.14s ease-out, transform 0.1s ease-out;
+}
+
+/* Iconos de TODOS los items (incluyendo logout) */
+ion-menu-toggle ion-item ion-icon {
+  color: #2f855a;
+}
+
+/* Hover / focus */
+ion-menu-toggle ion-item:hover {
+  --background: rgba(159, 230, 170, 0.26);
+  transform: translateX(2px);
+}
+
+/* Item activo (ruta actual) */
+ion-menu-toggle ion-item.router-link-active,
+ion-menu-toggle ion-item[aria-current='page'] {
+  --background: rgba(47, 133, 90, 0.18);
+  --color: #1f2933;
+}
+
+/* Label de los items */
+ion-menu-toggle ion-item ion-label {
+  font-weight: 500;
+}
+
+/* NO hay estilos especiales para el último (logout),
+   así que se ve igual que el resto */
+
+/* ========= Responsivo ligero ========= */
+
+@media (max-width: 480px) {
+  ion-menu {
+    --width: 240px;
+  }
+
+  ion-menu ion-list {
+    padding-top: 4px;
+  }
+
+  ion-menu ion-item:first-child {
+    margin-inline: 8px;
+  }
+
+  ion-menu-toggle ion-item {
+    margin-inline: 6px;
+  }
+}

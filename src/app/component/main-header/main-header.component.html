@@ -1,0 +1,114 @@
+<ion-header class="main-header">
+  <ion-toolbar>
+
+    <!-- IZQUIERDA: botón hamburguesa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="toggleMenu()">
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- CENTRO: título -->
+    <ion-title>{{ titulo || 'Plataforma IoT Compost' }}</ion-title>
+
+    <!-- DERECHA: notificaciones + avatar -->
+    <ion-buttons slot="end">
+      <!-- Botón de notificaciones -->
+      <ion-button class="notif-btn" fill="clear" (click)="openNotifMenu($event)">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge *ngIf="unreadCount > 0" color="danger" class="notif-badge">
+          {{ unreadCount }}
+        </ion-badge>
+      </ion-button>
+
+      <!-- Avatar usuario -->
+      <ion-button fill="clear" (click)="openUserMenu($event)">
+        <div class="avatar">
+          {{ inicialesUsuario }}
+        </div>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- POPOVER USUARIO -->
+<ion-popover
+  [isOpen]="popoverOpen"
+  [event]="popoverEvent"
+  (didDismiss)="popoverOpen = false"
+  side="bottom"
+  alignment="end"
+  [dismissOnSelect]="true"
+>
+  <ng-template>
+    <ion-content class="user-menu">
+      <ion-list>
+        <ion-item button (click)="irPerfil()">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-label>Perfil / Información personal</ion-label>
+        </ion-item>
+
+        <ion-item button (click)="cambiarPassword()">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-label>Cambiar contraseña</ion-label>
+        </ion-item>
+        
+        <ion-item button detail="false" (click)="logout()">
+          <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+          <ion-label color="danger">Cerrar sesión</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>
+
+<!-- POPOVER NOTIFICACIONES (tipo Facebook) -->
+<ion-popover
+  [isOpen]="notifPopoverOpen"
+  [event]="notifPopoverEvent"
+  (didDismiss)="notifPopoverOpen = false"
+  side="bottom"
+  alignment="end"
+  [dismissOnSelect]="true"
+>
+  <ng-template>
+    <ion-content class="notif-popover">
+      <ion-list *ngIf="notificaciones && notificaciones.length; else sinNotif">
+
+        <ion-item
+          button
+          *ngFor="let n of notificaciones | slice:0:5"
+          (click)="irNotificacion(n)"
+          [class.no-leida]="!n.leida"
+        >
+          <ion-icon
+            slot="start"
+            [name]="
+              n.tipo === 'critica'
+                ? 'warning-outline'
+                : n.tipo === 'proceso'
+                ? 'leaf-outline'
+                : 'information-circle-outline'
+            "
+          ></ion-icon>
+          <ion-label>
+            <h3>{{ n.titulo }}</h3>
+            <p>{{ n.mensaje }}</p>
+            <p class="fecha">{{ n.fecha }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none" button detail="true" (click)="irPaginaNotificaciones()">
+          <ion-label>Ver todas las notificaciones</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <ng-template #sinNotif>
+        <div class="notif-empty">
+          <ion-icon name="leaf-outline"></ion-icon>
+          <p>No tienes notificaciones pendientes.</p>
+        </div>
+      </ng-template>
+    </ion-content>
+  </ng-template>
+</ion-popover>

@@ -1,0 +1,214 @@
+<app-main-header titulo="Usuarios y roles"></app-main-header>
+
+<ion-content class="usuarios-content theme-light">
+  <div class="page-wrapper">
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+      <div class="top-left">
+        <h1>Gestión de usuarios</h1>
+        <p class="subtitle">
+          Define quién puede acceder a la Plataforma IoT Compost y qué puede hacer
+          dentro del sistema.
+        </p>
+      </div>
+
+      <div class="top-right">
+        <ion-searchbar
+          class="searchbar"
+          placeholder="Buscar por nombre, correo o rol"
+          [(ngModel)]="search"
+          (ionInput)="aplicarFiltro()"
+          debounce="250"
+        ></ion-searchbar>
+
+        <div class="counter-pill" *ngIf="usuariosFiltrados.length !== null">
+          <span class="dot"></span>
+          {{ usuariosFiltrados.length || 0 }} usuarios
+        </div>
+      </div>
+    </div>
+
+    <!-- MENSAJES GLOBALES -->
+    <div class="global-state" *ngIf="cargando || errorMsg">
+      <div *ngIf="cargando" class="state-item">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>Cargando usuarios...</span>
+      </div>
+      <div *ngIf="!cargando && errorMsg" class="state-item error">
+        <ion-icon name="warning-outline"></ion-icon>
+        <span>{{ errorMsg }}</span>
+      </div>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="layout-grid">
+      <!-- ===== PANEL IZQUIERDO: PERFIL / FORMULARIO ===== -->
+      <ion-card class="panel form-panel">
+        <ion-card-header>
+          <div class="panel-header">
+            <div>
+              <ion-card-subtitle>Perfil de acceso</ion-card-subtitle>
+              <ion-card-title>
+                {{ editingUser ? 'Editar usuario' : 'Nuevo usuario' }}
+              </ion-card-title>
+            </div>
+
+            <span
+              class="mode-pill"
+              [ngClass]="editingUser ? 'mode-edit' : 'mode-create'"
+            >
+              <ion-icon
+                [name]="editingUser ? 'create-outline' : 'person-add-outline'"
+              ></ion-icon>
+              {{ editingUser ? 'Modo edición' : 'Modo creación' }}
+            </span>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <form [formGroup]="form" (ngSubmit)="guardar()">
+            <!-- Nombre -->
+            <ion-item lines="full">
+              <ion-label position="stacked">Nombre completo</ion-label>
+              <ion-input
+                formControlName="nombre"
+                autocomplete="off"
+              ></ion-input>
+            </ion-item>
+
+            <!-- Correo -->
+            <ion-item lines="full">
+              <ion-label position="stacked">Correo electrónico</ion-label>
+              <ion-input
+                formControlName="email"
+                type="email"
+                autocomplete="off"
+              ></ion-input>
+            </ion-item>
+
+            <!-- Rol -->
+            <ion-item lines="none" class="rol-item">
+              <ion-label position="stacked">Rol</ion-label>
+              <ion-select formControlName="rol" interface="popover">
+                <ion-select-option value="estandar">Estandar</ion-select-option>
+                <ion-select-option value="tecnico">
+                  Técnico / Investigador
+                </ion-select-option>
+                <ion-select-option value="administrador">
+                  Administrador
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <div class="form-helper">
+              Los nuevos usuarios reciben una contraseña inicial generada por la API
+              o el backend. Podrás resetearla desde la tabla de usuarios.
+            </div>
+
+            <!-- Botones -->
+            <div class="form-actions">
+              <ion-button
+                type="submit"
+                [disabled]="form.invalid || guardando"
+              >
+                <ion-icon
+                  slot="start"
+                  [name]="editingUser ? 'checkmark-done-outline' : 'save-outline'"
+                ></ion-icon>
+                {{ editingUser ? 'Guardar cambios' : 'Guardar usuario' }}
+              </ion-button>
+
+              <button
+                type="button"
+                class="link-btn"
+                *ngIf="editingUser"
+                (click)="cancelarEdicion()"
+              >
+                Cancelar edición
+              </button>
+            </div>
+          </form>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- ===== PANEL DERECHO: TABLA DE USUARIOS ===== -->
+      <ion-card class="panel list-panel">
+        <ion-card-header>
+          <div class="panel-header panel-header-list">
+            <div>
+              <ion-card-subtitle>Usuarios registrados</ion-card-subtitle>
+              <ion-card-title>Listado de cuentas activas</ion-card-title>
+            </div>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div
+            class="table-wrapper"
+            *ngIf="usuariosFiltrados.length; else noUsers"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Rol</th>
+                  <th class="acciones">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let u of usuariosFiltrados">
+                  <td>#{{ u.id }}</td>
+                  <td>{{ u.nombre }}</td>
+                  <td>{{ u.email }}</td>
+                  <td>
+                    <span class="rol-pill" [ngClass]="'rol-' + u.rol">
+                      {{ u.rol | titlecase }}
+                    </span>
+                  </td>
+                  <td class="acciones">
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      (click)="editarUsuario(u)"
+                      aria-label="Editar usuario"
+                    >
+                      <ion-icon name="create-outline"></ion-icon>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      (click)="resetPassword(u)"
+                      aria-label="Resetear contraseña"
+                    >
+                      <ion-icon name="key-outline"></ion-icon>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="icon-btn danger"
+                      (click)="eliminarUsuario(u)"
+                      aria-label="Eliminar usuario"
+                    >
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ng-template #noUsers>
+            <p class="state-text muted">
+              No hay usuarios que coincidan con el filtro actual.
+            </p>
+          </ng-template>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

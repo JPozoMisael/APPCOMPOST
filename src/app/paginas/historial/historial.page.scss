@@ -1,0 +1,357 @@
+/* src/app/paginas/historial/historial.page.scss */
+
+/* ===== FONDO GENERAL ===== */
+.historial-content {
+  --background: #f4f6fb;
+  background: #f4f6fb;
+}
+
+/* Contenedor principal */
+.historial-wrapper {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 12px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #111827;
+}
+
+/* ================= RESUMEN SUPERIOR ================= */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-card.alert .summary-value {
+  color: #dc2626;
+}
+
+.summary-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.summary-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ================= CARD PRINCIPAL ================= */
+
+.main-card {
+  border-radius: 18px;
+  padding-top: 4px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.1);
+}
+
+.main-tabs {
+  margin: 0 8px 4px;
+  --background: transparent;
+}
+
+.main-card-content {
+  padding-inline: 10px;
+}
+
+/* Layout 2 columnas (sensores) */
+
+.layout-2cols {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.3fr);
+  gap: 16px;
+}
+
+/* ================= PANEL FILTROS ================= */
+
+.filters-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 14px 14px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-title {
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.filter-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+/* Fecha */
+
+.date-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-button {
+  --background: #eff3ff;
+  --border-radius: 999px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.date-text {
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+/* Variables como chips */
+
+.var-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.var-chip {
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.var-chip ion-icon {
+  font-size: 1.1rem;
+  color: #16a34a;
+}
+
+.var-chip div span {
+  display: block;
+  font-weight: 600;
+}
+
+.var-chip div small {
+  display: block;
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.var-chip:hover {
+  background: #ecfdf3;
+}
+
+.var-chip.active {
+  background: #dcfce7;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.25);
+}
+
+/* ================= PANEL DATOS ================= */
+
+.data-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Resumen de variable */
+
+.resumen-card {
+  background: #e8f7ee;
+  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(34, 164, 93, 0.25);
+}
+
+.resumen-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #14532d;
+}
+
+.resumen-header p {
+  margin: 3px 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.resumen-grid {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.resumen-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px;
+  text-align: center;
+}
+
+.resumen-item .label {
+  display: block;
+  font-size: 0.72rem;
+  color: #6b7280;
+}
+
+.resumen-item .value {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+/* ================= LISTAS (cards) ================= */
+
+.list-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+}
+
+ion-card-header {
+  padding: 10px 14px 6px;
+}
+
+ion-card-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+ion-card-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Estado de carga */
+
+.list-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Items */
+
+ion-item {
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  --min-height: 44px;
+  font-size: 0.85rem;
+}
+
+ion-item h3 {
+  font-size: 0.88rem;
+  margin-bottom: 2px;
+}
+
+ion-item p {
+  font-size: 0.78rem;
+}
+
+/* Fecha en logs */
+
+.log-fecha {
+  font-size: 0.74rem;
+  color: #9ca3af;
+}
+
+/* Estados acciones fuzzy */
+
+.estado-pendiente {
+  color: #f97316;
+}
+
+.estado-aplicada {
+  color: #16a34a;
+}
+
+/* Alertas */
+
+.badge-alerta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.badge-danger {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+}
+
+.badge-warning {
+  background: rgba(249, 115, 22, 0.1);
+  color: #c05621;
+}
+
+.estado-no-leida {
+  font-size: 0.75rem;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout-2cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .summary-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .resumen-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .resumen-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,178 @@
+.login-content {
+  --bg: #f3f4f6;
+  --text: #111827;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --primary: #2563eb;
+  --accent: #22c55e;
+  --danger: #ef4444;
+  --radius-lg: 18px;
+  --shadow: 0 22px 60px rgba(15, 23, 42, 0.17);
+
+  ion-content {
+    --background: var(--bg);
+  }
+}
+
+/* ==== GRID PRINCIPAL (2 COLUMNAS) ==== */
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= HERO IZQUIERDO ================= */
+.hero-side {
+  background-image: url('/assets/img/logo1.png');
+  background-size: cover;
+  background-position: center;
+}
+
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0.45)
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 46px 48px;
+  color: white;
+  max-width: 550px;
+
+  @media (max-width: 900px) {
+    padding: 26px 22px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    line-height: 1.1;
+    margin: 20px 0 12px;
+
+    @media (max-width: 900px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    max-width: 420px;
+  }
+}
+
+.brand-pill {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.08em;
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+}
+
+/* =============== FORMULARIO (DERECHA) =============== */
+.form-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  ion-card-content {
+    padding: 26px;
+  }
+}
+
+/* Header */
+.form-header {
+  text-align: center;
+  margin-bottom: 18px;
+
+  .form-logo img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .form-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .form-subtitle {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+}
+
+/* Inputs */
+.input-item {
+  border-radius: 14px;
+  margin-top: 12px;
+  --background: #ffffff;
+  border: 1px solid #e5e7eb;
+
+  ion-icon {
+    color: var(--muted);
+    font-size: 20px;
+  }
+}
+
+.password-item {
+  position: relative;
+}
+
+.toggle-btn ion-icon {
+  font-size: 22px;
+  color: var(--muted);
+}
+
+/* Botón */
+.btn-login {
+  margin-top: 18px;
+  --border-radius: 999px;
+  --background: var(--primary);
+  --background-activated: #1d4ed8;
+}
+
+/* Links */
+.auth-links {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.82rem;
+
+  a {
+    color: var(--primary);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

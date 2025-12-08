@@ -1,0 +1,197 @@
+<app-main-header titulo="Configuración del sistema"></app-main-header>
+
+<ion-content class="config-content theme-light">
+  <div class="page-wrapper">
+    <!-- Cabecera -->
+    <div class="page-header">
+      <div>
+        <h1>Configuración del sistema</h1>
+        <p class="subtitle">
+          Ajusta el comportamiento general de la Plataforma IoT Compost y tus preferencias de notificación.
+        </p>
+      </div>
+
+      <div *ngIf="ultimaActualizacion" class="last-update">
+        <ion-icon name="time-outline"></ion-icon>
+        <span>Última actualización: {{ ultimaActualizacion | date: 'short' }}</span>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <!-- Apariencia / accesibilidad -->
+      <ion-card class="panel">
+        <ion-card-header>
+          <ion-card-subtitle>Apariencia</ion-card-subtitle>
+          <ion-card-title>Aspecto de la plataforma</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-label>Modo de tema</ion-label>
+            <ion-select formControlName="tema" interface="popover">
+              <ion-select-option value="auto">Automático</ion-select-option>
+              <ion-select-option value="claro">Claro</ion-select-option>
+              <ion-select-option value="oscuro">Oscuro</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label>Tamaño de fuente</ion-label>
+            <ion-select formControlName="tamFuente" interface="popover">
+              <ion-select-option value="normal">Normal</ion-select-option>
+              <ion-select-option value="grande">Grande</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label>
+              <h3>Reducir animaciones</h3>
+              <p>
+                Desactiva ciertos efectos visuales para mejorar la accesibilidad y el rendimiento en equipos lentos.
+              </p>
+            </ion-label>
+            <ion-toggle formControlName="reducirAnimaciones" color="success"></ion-toggle>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Canales de notificación -->
+      <ion-card class="panel">
+        <ion-card-header>
+          <ion-card-subtitle>Canales</ion-card-subtitle>
+          <ion-card-title>¿Por dónde quieres recibir avisos?</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="channel-row">
+            <div class="channel-main">
+              <h3>Email</h3>
+              <p>Alertas y resúmenes al correo asociado a tu cuenta.</p>
+            </div>
+            <ion-toggle formControlName="email" color="success"></ion-toggle>
+          </div>
+
+          <div class="channel-row">
+            <div class="channel-main">
+              <h3>Notificaciones en la app</h3>
+              <p>Mensajes dentro de la Plataforma IoT Compost.</p>
+            </div>
+            <ion-toggle formControlName="push" color="success"></ion-toggle>
+          </div>
+
+          <div class="channel-row">
+            <div class="channel-main">
+              <h3>SMS</h3>
+              <p>Solo para alertas críticas del proceso de compostaje.</p>
+            </div>
+            <ion-toggle formControlName="sms" color="success"></ion-toggle>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Tipos de alertas -->
+      <ion-card class="panel">
+        <ion-card-header>
+          <ion-card-subtitle>Alertas</ion-card-subtitle>
+          <ion-card-title>¿Qué tipo de avisos quieres recibir?</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item lines="none">
+            <ion-label>
+              <h3>Alertas críticas</h3>
+              <p>
+                Eventos que requieren atención inmediata (temperatura fuera de rango,
+                gases elevados, fallos de sensores o dispositivos).
+              </p>
+            </ion-label>
+            <ion-toggle
+              formControlName="alertasCriticas"
+              color="success"
+            ></ion-toggle>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label>
+              <h3>Alertas del proceso</h3>
+              <p>
+                Recordatorios sobre volteo, hidratación, tiempo de maduración y
+                cambios de fase.
+              </p>
+            </ion-label>
+            <ion-toggle
+              formControlName="alertasProceso"
+              color="success"
+            ></ion-toggle>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label>
+              <h3>Alertas informativas</h3>
+              <p>
+                Mensajes de resumen, novedades de la plataforma y recomendaciones generales.
+              </p>
+            </ion-label>
+            <ion-toggle
+              formControlName="alertasInformativas"
+              color="success"
+            ></ion-toggle>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Resúmenes -->
+      <ion-card class="panel">
+        <ion-card-header>
+          <ion-card-subtitle>Resúmenes</ion-card-subtitle>
+          <ion-card-title>Frecuencia de reportes</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="resumen-text">
+            Recibe un resumen periódico del estado de tu compostera con las
+            principales métricas, alertas y recomendaciones.
+          </p>
+
+          <ion-item lines="full" class="resumen-item">
+            <ion-label>Frecuencia</ion-label>
+            <ion-select formControlName="resumenFrecuencia" interface="popover">
+              <ion-select-option value="diario">Diario</ion-select-option>
+              <ion-select-option value="semanal">Semanal</ion-select-option>
+              <ion-select-option value="mensual">Mensual</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <div class="resumen-hint">
+            <ion-icon name="leaf-outline"></ion-icon>
+            <p>
+              Te recomendamos un resumen <strong>semanal</strong> para un seguimiento
+              equilibrado de tu proceso de compostaje.
+            </p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Acciones -->
+      <div class="form-actions">
+        <ion-button
+          type="button"
+          fill="clear"
+          (click)="restablecerValores()"
+          [disabled]="guardando"
+        >
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Restablecer valores
+        </ion-button>
+
+        <ion-button
+          type="submit"
+          [disabled]="guardando || form.invalid"
+        >
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Guardar configuración
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

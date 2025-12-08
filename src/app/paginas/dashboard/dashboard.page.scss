@@ -1,0 +1,536 @@
+/* =========================
+   PALETA ORGÁNICA / COMPOST
+   ========================= */
+.dashboard-content.theme-light {
+  /* Fondo tipo papel reciclado verdoso */
+  --bg: #f3f6f1;
+  --surface: #ffffff;
+  --surface-2: #e4f0e2;
+  --border: #d0ddcf;
+  --text: #143423;
+  --muted: #6b7b6b;
+
+  /* Verdes y tierras */
+  --primary: #2f855a;                 /* verde hoja */
+  --primary-soft: rgba(47, 133, 90, 0.14);
+  --primary-strong: #276749;
+
+  --ok: #38a169;                      /* verde saludable */
+  --warn: #dd6b20;                    /* naranja tierra seca */
+  --danger: #c53030;                  /* rojo alerta */
+
+  --radius-lg: 18px;
+  --shadow-lg: 0 18px 38px rgba(15, 23, 15, 0.12);
+}
+
+.page-wrapper {
+  padding: 14px 16px 26px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--text);
+
+  /* Fondo tipo papel reciclado con textura suave */
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.6), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(211, 236, 211, 0.7), transparent 55%),
+    linear-gradient(135deg, #edf2ea 0%, #f4f7f1 100%);
+}
+
+/* =========================
+   CABECERA
+   ========================= */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+
+.top-bar h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--primary-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Simbolito de hoja antes del título */
+.top-bar h1::before {
+  content: '🌱';
+  font-size: 20px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.badge-danger {
+  background: rgba(197, 48, 48, 0.1);
+  color: var(--danger);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid rgba(197, 48, 48, 0.3);
+}
+
+/* === Botones top bar – estilo más pro === */
+
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* Botón MONITOREO: pill azul suave */
+.top-actions ion-button.btn-monitor {
+  --background: rgba(37, 99, 235, 0.08);
+  --background-hover: rgba(37, 99, 235, 0.16);
+  --color: #2563eb;
+  --border-radius: 999px;
+  --padding-start: 12px;
+  --padding-end: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* Botón refrescar: ghost redondo con icono centrado */
+.top-actions ion-button.btn-refresh-ghost {
+  --background: transparent;
+  --background-hover: rgba(15, 23, 42, 0.06);
+  --color: #2563eb;
+  --border-radius: 999px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+/* Tamaño del icono de refresh */
+.top-actions ion-button.btn-refresh-ghost ion-icon {
+  font-size: 18px;
+}
+
+/* Animación de giro cuando está cargando */
+.top-actions ion-button.btn-refresh-ghost.is-busy ion-icon {
+  animation: spin-refresh 0.9s linear infinite;
+}
+
+@keyframes spin-refresh {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Chips pequeños de KPI superior */
+.top-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.chip {
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #1f2937;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(163, 177, 163, 0.7);
+}
+
+.chip strong {
+  font-weight: 700;
+  color: var(--primary-strong);
+}
+
+/* =========================
+   KPI PRINCIPALES
+   ========================= */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  border: 1px solid rgba(198, 213, 198, 0.9);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Franja verde suave arriba de cada tarjeta KPI */
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9ae6b4, #48bb78);
+}
+
+/* Una textura muy suave en el fondo de la tarjeta */
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image:
+    radial-gradient(circle at 0 0, #c6f6d5 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #fefcbf 0, transparent 55%);
+  pointer-events: none;
+}
+
+.kpi-card h3 {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0 4px;
+  position: relative;
+}
+
+.kpi-value {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--primary-strong);
+  position: relative;
+}
+
+.kpi-value span {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+/* =========================
+   CARDS / FILAS
+   ========================= */
+.row-2,
+.row-3 {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(198, 213, 198, 0.9);
+  box-shadow: var(--shadow-lg);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* ligera textura de papel en cada card */
+  background-image:
+    radial-gradient(circle at 0 0, rgba(154, 230, 180, 0.08), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(254, 252, 191, 0.08), transparent 55%);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 600;
+  color: var(--primary-strong);
+}
+
+.badge-soft {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px dashed rgba(47, 133, 90, 0.4);
+}
+
+/* Gráfica */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: 14px;
+  background: #f2f6ee;
+  padding: 4px;
+}
+
+/* =========================
+   TANQUE / ACTUADORES
+   ========================= */
+.tank-wrapper {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.tank {
+  width: 70px;
+  height: 140px;
+  border-radius: 40px;
+  border: 2px solid var(--border);
+  background: linear-gradient(to top, #d1fae5, #edf2ea);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Simular “capas” de compost con degradado */
+.tank-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(
+      to top,
+      #22543d 0%,
+      #276749 35%,
+      #38a169 55%,
+      #9ae6b4 75%,
+      #fefcbf 100%
+    );
+  transition: height 0.4s ease-out;
+}
+
+.tank-info h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-strong);
+}
+
+.tank-info p {
+  margin: 2px 0;
+}
+
+.tank-info .muted {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.actuators-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.actuators-grid h4 {
+  font-size: 12px;
+  margin: 0 0 2px;
+  color: var(--primary-strong);
+}
+
+.actuators-grid p {
+  margin: 0;
+  font-size: 11px;
+}
+
+/* Pills / badges */
+.pill {
+  display: inline-flex;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--muted);
+}
+
+.pill-ok {
+  background: rgba(56, 161, 105, 0.12);
+  color: var(--ok);
+}
+
+.pill-warning {
+  background: rgba(221, 107, 32, 0.12);
+  color: var(--warn);
+}
+
+.pill-danger {
+  background: rgba(197, 48, 48, 0.13);
+  color: var(--danger);
+}
+
+/* =========================
+   ESQUEMA SVG (NO TOCAR LÓGICA)
+   ========================= */
+
+/* 🔹 NUEVO: contenedor del esquema SVG */
+.scheme-wrapper {
+  padding: 10px;
+}
+
+/* 🔹 El componente y el SVG ocupan todo el ancho disponible */
+.scheme-wrapper app-esquema-compostera,
+.scheme-wrapper svg {
+  width: 100%;
+  max-height: 260px;
+  display: block;
+}
+
+/* =========================
+   TABLA ALERTAS
+   ========================= */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  background: rgba(243, 250, 244, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(209, 213, 219, 0.8);
+  text-align: left;
+}
+
+thead {
+  background: #e5f3e2;
+}
+
+th {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* =========================
+   RESPONSIVO
+   ========================= */
+@media (max-width: 960px) {
+  .kpi-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .row-2,
+  .row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .top-bar {
+    flex-direction: column;
+  }
+
+  .actuators-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   TOQUE FIGMA EXTRA (ion-icon)
+   ========================= */
+
+/* Header de cada KPI con icono + texto */
+.kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.kpi-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(47, 133, 90, 0.08);
+  box-shadow: 0 0 0 1px rgba(47, 133, 90, 0.16) inset;
+}
+
+.kpi-icon ion-icon {
+  font-size: 16px;
+}
+
+/* Variantes de color por tipo de sensor (opcional) */
+.kpi-icon-temp {
+  background: rgba(56, 161, 105, 0.1);
+}
+
+.kpi-icon-hum {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.kpi-icon-nh3 {
+  background: rgba(221, 107, 32, 0.12);
+}
+
+.kpi-icon-ch4 {
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.kpi-sub {
+  margin: 0;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* Valor vacío (---) más tenue */
+.kpi-value.kpi-empty {
+  opacity: 0.6;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* Hover suave tipo Figma para cards */
+.kpi-card,
+.card {
+  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+}
+
+.kpi-card:hover,
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 40px rgba(15, 23, 15, 0.18);
+  border-color: rgba(47, 133, 90, 0.35);
+}
+
+@media (max-width: 960px) {
+  .kpi-card:hover,
+  .card:hover {
+    transform: translateY(-0.5px);
+    box-shadow: 0 10px 24px rgba(15, 23, 15, 0.14);
+  }
+}
+
+/* Tanque animado + detalles que ya te pasé antes puedes dejarlos igual */

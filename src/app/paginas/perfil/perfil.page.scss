@@ -1,0 +1,171 @@
+.perfil-content {
+  --background: none;
+  color: #111827;
+
+  background:
+    radial-gradient(circle at 0 0, rgba(190, 242, 200, 0.18), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(254, 252, 191, 0.18), transparent 55%),
+    #f5f7f2;
+}
+
+/* CONTENEDOR GENERAL */
+.perfil-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 8px 28px;
+  display: grid;
+  gap: 16px;
+
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+  .perfil-wrapper {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+}
+
+/* TARJETAS */
+.perfil-card,
+.preferencias-card {
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  background: #ffffff;
+}
+
+/* ======= TARJETA PERFIL ======= */
+
+.perfil-card ion-card-header,
+.perfil-card ion-card-content {
+  padding-inline: 18px;
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 4px;
+}
+
+/* AVATAR CON INICIALES */
+.perfil-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #22a45d;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* INFO BÁSICA */
+.perfil-info h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.perfil-info .correo {
+  margin: 2px 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.perfil-info .rol {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #15803d;
+  font-weight: 500;
+}
+
+/* Chip "Cuenta activa" */
+.estado-cuenta-pill {
+  margin: 6px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: #ecfdf3;
+  color: #166534;
+}
+
+.estado-cuenta-pill .estado-icon {
+  font-size: 1rem;
+}
+
+/* Lista detalles */
+.perfil-detalles ion-item {
+  --background: #ffffff;
+  --min-height: 46px;
+}
+
+.perfil-detalles h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.perfil-detalles p {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.perfil-detalles ion-icon {
+  color: #9ca3af;
+}
+
+/* Botones acciones */
+.perfil-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  ion-button {
+    --border-radius: 999px;
+    font-size: 0.85rem;
+  }
+}
+
+/* TARJETA INFORMACIÓN CUENTA */
+
+.preferencias-card ion-card-header,
+.preferencias-card ion-card-content {
+  padding-inline: 18px;
+}
+
+.preferencias-card ion-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.preferencias-card ion-card-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .perfil-wrapper {
+    padding-inline: 4px;
+  }
+
+  .perfil-header {
+    align-items: flex-start;
+  }
+}

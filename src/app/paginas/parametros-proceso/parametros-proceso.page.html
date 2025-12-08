@@ -1,0 +1,300 @@
+<app-main-header titulo="Parámetros del proceso"></app-main-header>
+
+<ion-content class="parametros-content theme-light">
+  <div class="page-wrapper">
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="top-left">
+        <h1>Parámetros del proceso</h1>
+        <p class="subtitle">
+          Configura las condiciones del proceso de compostaje, el comportamiento automático
+          de los actuadores y las reglas de notificación de la Plataforma IoT Compost.
+        </p>
+      </div>
+
+      <div class="top-right">
+        <div class="mode-pill">
+          <ion-icon name="settings-outline"></ion-icon>
+          Perfil de configuración
+        </div>
+        <div class="last-update" *ngIf="ultimaActualizacion">
+          <ion-icon name="time-outline"></ion-icon>
+          Última actualización:
+          <span>{{ ultimaActualizacion | date: 'short' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULARIO GENERAL -->
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="sections-grid">
+        <!-- ===== 1. CONDICIONES AMBIENTALES ===== -->
+        <ion-card class="panel panel-ambiental">
+          <ion-card-header>
+            <ion-card-subtitle>Condiciones ambientales</ion-card-subtitle>
+            <ion-card-title>Rangos ideales del proceso</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p class="panel-text">
+              Define los rangos de temperatura y humedad en los que el proceso de compostaje
+              debe operar. Estos valores serán usados por el sistema de monitoreo y las reglas de alerta.
+            </p>
+
+            <div class="two-cols">
+              <ion-item lines="full">
+                <ion-label position="stacked">Temperatura mínima (°C)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="tempMin"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Temperatura máxima (°C)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="tempMax"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+            </div>
+
+            <div class="two-cols">
+              <ion-item lines="full">
+                <ion-label position="stacked">Humedad mínima (%)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="humMin"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Humedad máxima (%)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="humMax"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+            </div>
+
+            <ion-item lines="none">
+              <ion-label position="stacked">Umbral de gases (CH₄ / NH₃) [ppm]</ion-label>
+              <ion-input
+                type="number"
+                formControlName="gasUmbral"
+                inputmode="decimal"
+              ></ion-input>
+            </ion-item>
+
+            <p class="helper-text">
+              Estos umbrales se utilizan para disparar alertas ambientales y activar
+              acciones de seguridad (ventilación y avisos).
+            </p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- ===== 2. CONTROL AUTOMÁTICO ===== -->
+        <ion-card class="panel panel-control">
+          <ion-card-header>
+            <ion-card-subtitle>Control automático</ion-card-subtitle>
+            <ion-card-title>Actuadores y lógica de respuesta</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p class="panel-text">
+              Configura cómo debe reaccionar la compostera ante condiciones críticas:
+              ventilación, volteos y humedecido automático.
+            </p>
+
+            <div class="row-toggle">
+              <div>
+                <h4>Ventilador automático</h4>
+                <p>
+                  Activa o desactiva el control automático del ventilador
+                  en función de temperatura y gases.
+                </p>
+              </div>
+              <ion-toggle formControlName="autoVentilador"></ion-toggle>
+            </div>
+
+            <div class="two-cols">
+              <ion-item lines="full">
+                <ion-label position="stacked">Tiempo mínimo encendido (s)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="ventMinOn"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Tiempo mínimo reposo (s)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="ventMinOff"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+            </div>
+
+            <div class="row-toggle">
+              <div>
+                <h4>Volteo automático</h4>
+                <p>
+                  Permite programar volteos periódicos del material para mejorar la aireación
+                  y homogeneidad del proceso.
+                </p>
+              </div>
+              <ion-toggle formControlName="autoVolteo"></ion-toggle>
+            </div>
+
+            <ion-item lines="full">
+              <ion-label position="stacked">Intervalo entre volteos (horas)</ion-label>
+              <ion-input
+                type="number"
+                formControlName="volteoHoras"
+                inputmode="decimal"
+              ></ion-input>
+            </ion-item>
+
+            <p class="helper-text">
+              Ajusta estos valores según el tamaño de la compostera, tipo de residuo y
+              frecuencia de carga del sistema.
+            </p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- ===== 3. DATOS Y MONITOREO ===== -->
+        <ion-card class="panel panel-datos">
+          <ion-card-header>
+            <ion-card-subtitle>Datos y monitoreo</ion-card-subtitle>
+            <ion-card-title>Frecuencia de muestreo y envío</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p class="panel-text">
+              Controla cada cuánto tiempo se leen los sensores y cada cuánto se envían
+              los datos hacia la plataforma para su visualización.
+            </p>
+
+            <div class="two-cols">
+              <ion-item lines="full">
+                <ion-label position="stacked">Intervalo de muestreo (s)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="muestreoSegundos"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Frecuencia de envío (min)</ion-label>
+                <ion-input
+                  type="number"
+                  formControlName="envioMinutos"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+            </div>
+
+            <ion-item lines="full">
+              <ion-label position="stacked">Buffer offline máximo (muestras)</ion-label>
+              <ion-input
+                type="number"
+                formControlName="bufferMax"
+                inputmode="decimal"
+              ></ion-input>
+            </ion-item>
+
+            <p class="helper-text">
+              Un intervalo de muestreo muy corto aumenta el detalle pero también el consumo
+              de energía y datos. Ajusta estos valores según el contexto de uso.
+            </p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- ===== 4. ALERTAS Y NOTIFICACIONES ===== -->
+        <ion-card class="panel panel-alertas">
+          <ion-card-header>
+            <ion-card-subtitle>Alertas y notificaciones</ion-card-subtitle>
+            <ion-card-title>Reglas de aviso al usuario</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p class="panel-text">
+              Define qué eventos deben generar alertas y cómo se notifica a los usuarios
+              responsables del monitoreo.
+            </p>
+
+            <div class="row-toggle">
+              <div>
+                <h4>Alertas críticas</h4>
+                <p>
+                  Temperatura o gases fuera de rango, fallo de sensores, pérdida de conexión
+                  con la plataforma.
+                </p>
+              </div>
+              <ion-toggle formControlName="notificarCriticas"></ion-toggle>
+            </div>
+
+            <div class="row-toggle">
+              <div>
+                <h4>Alertas informativas</h4>
+                <p>
+                  Volteos realizados, ventilaciones ejecutadas y otros eventos de seguimiento
+                  del proceso.
+                </p>
+              </div>
+              <ion-toggle formControlName="notificarInformativas"></ion-toggle>
+            </div>
+
+            <ion-item lines="full">
+              <ion-label position="stacked">Canal principal de notificación</ion-label>
+              <ion-select formControlName="canalNotificacion" interface="popover">
+                <ion-select-option value="app">Notificaciones en la app</ion-select-option>
+                <ion-select-option value="email">Correo electrónico</ion-select-option>
+                <ion-select-option value="ambos">App + correo</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <p class="helper-text">
+              La configuración de alertas no sustituye a las medidas de seguridad físicas
+              del sistema, pero ayuda a reaccionar a tiempo frente a eventos críticos.
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- FOOTER DE FORMULARIO -->
+      <div class="form-footer">
+        <div class="footer-left">
+          <p>
+            Estos parámetros afectan al comportamiento global de la compostera.
+            Procura documentar los cambios relevantes en la sección de auditoría.
+          </p>
+        </div>
+        <div class="footer-right">
+          <button
+            type="button"
+            class="link-btn"
+            (click)="restablecerValores()"
+          >
+            Restablecer valores sugeridos
+          </button>
+
+          <ion-button
+            type="submit"
+            [disabled]="form.invalid || guardando"
+          >
+            <ion-icon name="save-outline" slot="start"></ion-icon>
+            Guardar cambios
+          </ion-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>

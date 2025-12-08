@@ -1,0 +1,175 @@
+<app-main-header titulo="Auditoría / Logs"></app-main-header>
+
+<ion-content class="auditoria-content theme-light">
+  <div class="page-wrapper">
+
+    <!-- TOP BAR / RESUMEN -->
+    <div class="top-bar">
+      <div class="top-left">
+        <h1>Auditoría de eventos</h1>
+        <p class="subtitle">
+          Revisa la trazabilidad de acciones realizadas en la Plataforma IoT Compost:
+          accesos, cambios de configuración y eventos del sistema.
+        </p>
+      </div>
+
+      <div class="top-right">
+        <div class="kpi-pill">
+          <span class="kpi-label">Registros</span>
+          <span class="kpi-value">{{ logs.length }}</span>
+        </div>
+        <div class="kpi-pill kpi-alertas">
+          <span class="kpi-label">Alertas</span>
+          <span class="kpi-value">{{ totalAlertas }}</span>
+        </div>
+        <div class="kpi-pill kpi-sistema">
+          <span class="kpi-label">Sistema</span>
+          <span class="kpi-value">{{ totalSistema }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filters-card">
+      <div class="filters-left">
+        <ion-segment [(ngModel)]="rango" (ionChange)="onFiltroChange()">
+          <ion-segment-button value="24h">
+            <ion-label>24h</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="7d">
+            <ion-label>7 días</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="30d">
+            <ion-label>30 días</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="all">
+            <ion-label>Todo</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <ion-segment
+          class="tipo-segment"
+          [(ngModel)]="tipo"
+          (ionChange)="onFiltroChange()"
+        >
+          <ion-segment-button value="todos">
+            <ion-label>Todos</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="alertas">
+            <ion-label>Alertas</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="sistema">
+            <ion-label>Sistema</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div class="filters-right">
+        <ion-searchbar
+          placeholder="Buscar por acción, detalle o usuario"
+          [(ngModel)]="search"
+          (ionInput)="onFiltroChange()"
+          debounce="250"
+        ></ion-searchbar>
+
+        <ion-button
+          color="primary"
+          fill="outline"
+          [disabled]="!logsFiltrados.length"
+          (click)="exportCSV()"
+        >
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Exportar CSV
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Mensajes de carga / error -->
+    <div *ngIf="cargando" class="state-text">
+      <ion-spinner name="crescent"></ion-spinner>
+      <span>Cargando registros...</span>
+    </div>
+
+    <div *ngIf="!cargando && errorMsg" class="state-text error">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Tabla de logs -->
+    <div *ngIf="!cargando && !errorMsg" class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Evento</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let l of logsFiltrados"
+            [ngClass]="[
+              'log-row',
+              'log-' + (l.tipo || 'info')
+            ]"
+          >
+            <!-- FECHA -->
+            <td class="col-fecha">
+              <div class="fecha-main">
+                {{ formatFecha(l.fecha) }}
+              </div>
+              <div class="fecha-sub" *ngIf="l.origen">
+                {{ l.origen }}
+              </div>
+            </td>
+
+            <!-- EVENTO (tipo, acción, usuario, módulo) -->
+            <td class="col-evento">
+              <div class="evento-main">
+                <span
+                  class="pill-tipo"
+                  [ngClass]="'pill-' + (l.tipo || 'info')"
+                >
+                  {{ (l.tipo || 'sistema') | titlecase }}
+                </span>
+                <span class="evento-accion">
+                  {{ l.accion }}
+                </span>
+              </div>
+              <div class="evento-meta">
+                <span *ngIf="l.usuario" class="meta-chip">
+                  <ion-icon name="person-outline"></ion-icon>
+                  {{ l.usuario }}
+                </span>
+                <span *ngIf="l.modulo" class="meta-chip">
+                  <ion-icon name="albums-outline"></ion-icon>
+                  {{ l.modulo }}
+                </span>
+                <span *ngIf="l.resultado" class="meta-chip resultado" [ngClass]="l.resultado">
+                  <ion-icon
+                    [name]="
+                      l.resultado === 'error'
+                        ? 'close-circle-outline'
+                        : 'checkmark-circle-outline'
+                    "
+                  ></ion-icon>
+                  {{ l.resultado | titlecase }}
+                </span>
+              </div>
+            </td>
+
+            <!-- DETALLE -->
+            <td class="col-detalle">
+              <div class="detalle-main">
+                {{ l.detalle || '—' }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="!logsFiltrados.length" class="state-text muted">
+        No hay registros que coincidan con los filtros actuales.
+      </p>
+    </div>
+  </div>
+</ion-content>

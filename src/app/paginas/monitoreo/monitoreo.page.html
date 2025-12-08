@@ -1,0 +1,197 @@
+<app-main-header titulo="Monitoreo"></app-main-header>
+<ion-content class="monitoreo-content theme-light">
+  <div class="page-wrap">
+
+    <!-- ========== BARRA DE MODO DE OPERACIÓN ========== -->
+    <ion-card class="modo-card glassy">
+      <ion-card-content>
+        <div class="mode-row">
+
+          <!-- Izquierda: título + descripción -->
+          <div class="mode-title">
+            <div class="mode-icon">
+              <ion-icon name="options-outline"></ion-icon>
+            </div>
+            <div class="mode-text">
+              <div class="label">Modo de operación</div>
+              <div class="helper">
+                Control directo de los actuadores desde esta pantalla.
+              </div>
+            </div>
+          </div>
+
+          <!-- Centro: interruptor Manual / Automático -->
+          <div class="mode-switch">
+            <span class="opt" [class.active]="modo === 'manual'">Manual</span>
+
+            <ion-toggle
+              aria-label="Cambiar modo"
+              [checked]="modo === 'auto'"
+              (ionChange)="cambiarModo($event)"
+              color="success">
+            </ion-toggle>
+
+            <span class="opt" [class.active]="modo === 'auto'">Automático</span>
+          </div>
+
+          <!-- Derecha: acciones masivas + botón de gráficas -->
+          <div class="mode-actions" *ngIf="modo === 'manual'">
+            <ion-button class="btn-off" fill="solid" color="light" (click)="todo(false)">
+              <ion-icon name="power-outline" slot="start"></ion-icon>
+              Todo OFF
+            </ion-button>
+
+            <ion-button class="btn-on" fill="solid" (click)="todo(true)">
+              <ion-icon name="flash-outline" slot="start"></ion-icon>
+              Todo ON
+            </ion-button>
+
+            <!-- Botón para ir a la página de gráficas -->
+            <ion-button
+              class="btn-graphs"
+              size="small"
+              fill="outline"
+              color="primary"
+              routerLink="/graficas">
+              <ion-icon name="analytics-outline" slot="start"></ion-icon>
+              Ver gráficas
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Chip de estado del modo -->
+        <div class="mode-pill" [class.auto]="modo === 'auto'">
+          <span class="dot"></span>
+          <span>
+            {{ modo === 'auto' ? 'Control automático activo' : 'Modo manual activo' }}
+          </span>
+        </div>
+
+        <!-- Chip de estado de conexión MQTT -->
+        <div class="conn-pill" [class.down]="!isMqttOK">
+          <span class="dot"></span>
+          <span>
+            {{ isMqttOK ? 'MQTT conectado' : 'MQTT desconectado' }}
+          </span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ========== ACCIONES AUTOMÁTICAS (MODO AUTO) ========== -->
+    <ion-card *ngIf="modo === 'auto'" class="auto-card glassy">
+      <ion-card-header class="section-header">
+        <div class="section-icon">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+        <div class="section-text">
+          <div class="title">Acciones automatizadas</div>
+          <div class="subtitle">
+            Decisiones sugeridas por la lógica difusa según las condiciones del compostaje.
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list *ngIf="acciones.length; else sinAcciones">
+          <ion-item
+            *ngFor="let accion of acciones; trackBy: trackByAccion"
+            lines="inset"
+            class="auto-item">
+            <ion-icon name="flash-outline" slot="start" color="warning"></ion-icon>
+
+            <ion-label>
+              <h2>{{ accion.descripcion }}</h2>
+              <p class="muted">
+                <small>{{ accion.fecha | date: 'short' }}</small>
+              </p>
+            </ion-label>
+
+            <ion-chip
+              [color]="accion.estado === 'aplicada' ? 'success' : 'warning'"
+              outline
+              slot="end">
+              <ion-label>{{ accion.estado | titlecase }}</ion-label>
+            </ion-chip>
+
+            <ion-button
+              *ngIf="accion.estado === 'pendiente'"
+              fill="clear"
+              color="success"
+              (click)="aplicarAccion(accion.id)"
+              slot="end">
+              <ion-icon name="checkmark-done-circle-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <ng-template #sinAcciones>
+          <div class="sin-datos">
+            <ion-icon name="bulb-outline" color="medium"></ion-icon>
+            <p>No hay acciones automáticas pendientes.</p>
+          </div>
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ========== CONTROL MANUAL DE ACTUADORES ========== -->
+    <ion-card *ngIf="modo === 'manual'" class="manual-card glassy">
+      <ion-card-header class="section-header">
+        <div class="section-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+        <div class="section-text">
+          <div class="title">Control manual de actuadores</div>
+          <div class="subtitle">
+            Activa o desactiva cada elemento del sistema de forma individual.
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid class="act-grid">
+          <ion-row>
+            <ion-col
+              size="12"
+              size-lg="6"
+              *ngFor="let a of actuadores; trackBy: trackByAct">
+
+              <div class="actuador-card">
+                <div class="act-head">
+                  <!-- Icono + nombre + estado -->
+                  <div class="act-meta">
+                    <div class="act-icon" [class.on]="a.model()">
+                      <ion-icon [name]="a.icono"></ion-icon>
+                    </div>
+                    <div class="act-info">
+                      <div class="act-name">{{ a.nombre }}</div>
+                      <div class="act-status">
+                        <span class="label">Estado</span>
+                        <span
+                          class="pill"
+                          [class.on]="a.model()"
+                          [class.off]="!a.model()">
+                          {{ a.model() ? 'Activo' : 'Inactivo' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Toggle principal -->
+                  <ion-toggle
+                    aria-label="Toggle {{a.nombre}}"
+                    [disabled]="modo !== 'manual'"
+                    [checked]="a.model()"
+                    (ionChange)="a.toggle($event.detail.checked)"
+                    color="success">
+                  </ion-toggle>
+                </div>
+              </div>
+
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

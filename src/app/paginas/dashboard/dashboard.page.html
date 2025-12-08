@@ -1,0 +1,277 @@
+<app-main-header titulo="Dashboard"></app-main-header>
+<ion-content class="dashboard-content theme-light">
+  <div class="page-wrapper">
+
+    <!-- CABECERA SUPERIOR (chips + botones) -->
+    <div class="top-bar">
+  <div>
+    <p class="subtitle">
+      {{ fechaActual }} · {{ nombreUsuario }} ({{ rolUsuario }})
+      <span *ngIf="!healthOK" class="badge-danger">
+        Problemas en servicios
+      </span>
+    </p>
+  </div>
+
+  <div>
+    <!-- Fila 1: botones -->
+    <div class="top-actions">
+      <!-- Botón para ir a la página de monitoreo (control de actuadores) -->
+      <ion-button
+        size="small"
+        fill="clear"
+        routerLink="/monitoreo"
+        class="btn-monitor"
+      >
+        <ion-icon slot="start" name="toggle-outline"></ion-icon>
+        Monitoreo
+      </ion-button>
+
+      <!-- Botón de refrescar -->
+      <ion-button
+        size="small"
+        fill="clear"
+        (click)="refrescarDatos()"
+        [disabled]="cargando"
+        class="btn-refresh-ghost"
+        [class.is-busy]="cargando"
+      >
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Fila 2: chips -->
+    <div class="top-kpis">
+      <div class="chip">
+        Sensores: <strong>{{ sensoresActivos }}</strong>
+      </div>
+      <div class="chip">
+        Alertas hoy: <strong>{{ alertasHoy }}</strong>
+      </div>
+      <div class="chip">
+        Última conexión: <strong>{{ ultimaConexion }}</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FILA KPI PRINCIPALES -->
+<section class="kpi-row">
+  <!-- Temperatura -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon kpi-icon-temp">
+        <ion-icon name="thermometer-outline"></ion-icon>
+      </div>
+      <div>
+        <h3>Temperatura</h3>
+        <p class="kpi-sub">Lectura actual</p>
+      </div>
+    </div>
+    <p
+      class="kpi-value"
+      [class.kpi-empty]="tempActual == null"
+    >
+      {{ tempActual ?? '---' }} <span>°C</span>
+    </p>
+  </div>
+
+  <!-- Humedad -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon kpi-icon-hum">
+        <ion-icon name="water-outline"></ion-icon>
+      </div>
+      <div>
+        <h3>Humedad promedio</h3>
+        <p class="kpi-sub">Módulo de sensores</p>
+      </div>
+    </div>
+    <p
+      class="kpi-value"
+      [class.kpi-empty]="humedadActual == null"
+    >
+      {{ humedadActual ?? '---' }} <span>%</span>
+    </p>
+  </div>
+
+  <!-- NH3 -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon kpi-icon-nh3">
+        <ion-icon name="beaker-outline"></ion-icon>
+      </div>
+      <div>
+        <h3>NH₃</h3>
+        <p class="kpi-sub">Concentración relativa</p>
+      </div>
+    </div>
+    <p
+      class="kpi-value"
+      [class.kpi-empty]="nh3Actual == null"
+    >
+      {{ nh3Actual ?? '---' }} <span>%</span>
+    </p>
+  </div>
+
+  <!-- CH4 -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon kpi-icon-ch4">
+        <ion-icon name="flame-outline"></ion-icon>
+      </div>
+      <div>
+        <h3>CH₄</h3>
+        <p class="kpi-sub">PPM en cámara</p>
+      </div>
+    </div>
+    <p
+      class="kpi-value"
+      [class.kpi-empty]="ch4Actual == null"
+    >
+      {{ ch4Actual ?? '---' }} <span>ppm</span>
+    </p>
+  </div>
+</section>
+
+    <!-- FILA 2: GRÁFICA + ESTADO COMPOSTERA -->
+    <section class="row-2">
+      <div class="card large">
+        <div class="card-header">
+          <h2>Proceso de compostaje</h2>
+          <span class="badge-soft">Tiempo real</span>
+        </div>
+        <div class="chart-container">
+          <canvas #compostChart></canvas>
+        </div>
+      </div>
+
+      <div class="card medium">
+        <div class="card-header">
+          <h2>Estado de la compostera</h2>
+        </div>
+        <div class="tank-wrapper">
+          <div class="tank">
+            <div class="tank-fill" [style.height.%]="nivelMezcla"></div>
+          </div>
+          <div class="tank-info">
+            <p>Nivel actual</p>
+            <h3>{{ nivelMezcla }} %</h3>
+            <p class="muted">Recomendación actual (lógica difusa)</p>
+            <ion-button size="small" color="success" fill="solid" (click)="onMezclarMaterial()"[disabled]="mezclando">
+              <ion-spinner *ngIf="mezclando" name="crescent" slot="start"></ion-spinner>
+              {{ mezclando ? 'Mezclando…' : 'Mezclar el material' }}
+            </ion-button>
+          </div>
+        </div>
+
+        <div class="actuators-grid">
+          <div>
+            <h4>Ventiladores</h4>
+            <p>
+              Ventilador 1:
+              <span class="pill" [ngClass]="vent1Estado === 'ON' ? 'pill-ok' : ''">
+                {{ vent1Estado }}
+              </span>
+            </p>
+            <p>
+              Ventilador 2:
+              <span class="pill" [ngClass]="vent2Estado === 'ON' ? 'pill-ok' : ''">
+                {{ vent2Estado }}
+              </span>
+            </p>
+          </div>
+          <div>
+            <h4>Escotillas</h4>
+            <p>Servo 1: <strong>{{ servo1Estado }}</strong></p>
+            <p>Servo 2: <strong>{{ servo2Estado }}</strong></p>
+          </div>
+          <div>
+            <h4>Electroválvula / Motor</h4>
+            <p>
+              Electroválvula:
+              <span class="pill" [ngClass]="electrovalEstado === 'ON' ? 'pill-ok' : ''">
+                {{ electrovalEstado }}
+              </span>
+            </p>
+            <p>
+              Motor:
+              <span class="pill" [ngClass]="motorEstado === 'ON' ? 'pill-ok' : ''">
+                {{ motorEstado }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILA 3: ESQUEMA (COMPONENTE SVG) + ALERTAS -->
+    <section class="row-3">
+      <!-- ESQUEMA -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Esquema de la compostera (IoT)</h2>
+        </div>
+        <div class="scheme-wrapper">
+          <!--  AHORA EL ESQUEMA RECIBE LOS ESTADOS EN TIEMPO REAL -->
+          <app-esquema-compostera
+            [motorEstado]="motorEstado"
+            [vent1Estado]="vent1Estado"
+            [vent2Estado]="vent2Estado"
+            [electrovalEstado]="electrovalEstado"
+            [servo1Estado]="servo1Estado"
+            [servo2Estado]="servo2Estado"
+            [temp]="tempActual"
+            [humedad]="humedadActual"
+            [nh3]="nh3Actual"
+            [ch4]="ch4Actual"
+          ></app-esquema-compostera>
+        </div>
+      </div>
+
+      <!-- ALERTAS RECIENTES -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Alertas recientes</h2>
+          <ion-button size="small" fill="clear" (click)="exportCSV()">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            CSV
+          </ion-button>
+        </div>
+        <div class="table-wrapper" *ngIf="alertas.length; else noAlertas">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Alerta</th>
+                <th>Nivel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of alertas">
+                <td>{{ a.fecha }}</td>
+                <td>{{ a.tipo }}</td>
+                <td>
+                  <span
+                    class="pill"
+                    [ngClass]="{
+                      'pill-danger': a.nivel === 'Peligro',
+                      'pill-warning': a.nivel === 'Advertencia'
+                    }"
+                  >
+                    {{ a.nivel }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noAlertas>
+          <p class="muted">Sin alertas recientes.</p>
+        </ng-template>
+      </div>
+    </section>
+
+  </div>
+</ion-content>

@@ -1,0 +1,131 @@
+<app-main-header titulo="Perfil de usuario"></app-main-header>
+
+<ion-content class="perfil-content ion-padding">
+
+  <div class="perfil-wrapper">
+
+    <!-- TARJETA: INFORMACIÓN DEL USUARIO -->
+    <ion-card class="perfil-card">
+      <ion-card-header>
+        <div class="perfil-header">
+          <div class="perfil-avatar">
+            <span class="avatar-text">{{ inicialesUsuario }}</span>
+          </div>
+          <div class="perfil-info">
+            <h2>{{ nombreUsuario || 'Usuario' }}</h2>
+
+            <p class="correo" *ngIf="correoUsuario">
+              {{ correoUsuario }}
+            </p>
+
+            <p class="rol">
+              Rol: <strong>{{ rolUsuario | titlecase }}</strong>
+            </p>
+
+            <!-- Chip estado cuenta -->
+            <p class="estado-cuenta-pill">
+              <ion-icon name="checkmark-circle-outline" class="estado-icon"></ion-icon>
+              <span>Cuenta activa</span>
+            </p>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="none" class="perfil-detalles">
+          <ion-item>
+            <ion-icon name="id-card-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>ID de sesión</h3>
+              <p>{{ sessionId || '—' }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="time-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Último acceso</h3>
+              <p>{{ ultimoAcceso || '—' }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div class="perfil-actions">
+          <ion-button
+            expand="block"
+            fill="outline"
+            color="primary"
+            (click)="editarPerfil()">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Editar datos personales
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="solid"
+            color="medium"
+            (click)="abrirCambiarPassword()">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            Cambiar contraseña
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- TARJETA: INFORMACIÓN DE LA CUENTA / USO -->
+    <ion-card class="preferencias-card">
+      <ion-card-header>
+        <ion-card-title>Información de la cuenta</ion-card-title>
+        <ion-card-subtitle>
+          Resumen de cómo está configurado tu acceso en la Plataforma IoT Compost.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="full" class="perfil-detalles">
+
+          <ion-item>
+            <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Estado de la cuenta</h3>
+              <p>Cuenta activa y vinculada a tu usuario actual.</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="people-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Nivel de acceso</h3>
+              <p>
+                Tu rol actual es
+                <strong>{{ rolUsuario | titlecase }}</strong>, con permisos
+                acordes para operar y supervisar el proceso de compostaje.
+              </p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="settings-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Preferencias y notificaciones</h3>
+              <p>
+                La configuración de tema, alertas y resúmenes periódicos
+                se gestiona desde la pantalla <strong>Configuración del sistema</strong>.
+              </p>
+            </ion-label>
+          </ion-item>
+
+        </ion-list>
+
+        <ion-note color="medium">
+          Si necesitas cambiar el tema visual, la frecuencia de reportes o los
+          canales de notificación, utiliza la opción
+          <strong>Configuración del sistema</strong>
+          disponible en el menú superior.
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+</ion-content>

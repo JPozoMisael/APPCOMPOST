@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Crear Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="registro-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Registro de Usuario</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Nombre -->
+        <ion-item>
+          <ion-label position="floating">Nombre completo</ion-label>
+          <ion-input [(ngModel)]="datosRegistro.nombre" name="nombre" required></ion-input>
+        </ion-item>
+
+        <!-- Correo -->
+        <ion-item>
+          <ion-label position="floating">Correo electrónico</ion-label>
+          <ion-input type="email" [(ngModel)]="datosRegistro.email" name="email" required></ion-input>
+        </ion-item>
+
+        <!-- Contraseña -->
+        <ion-item>
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input
+            [type]="verPassword ? 'text' : 'password'"
+            [(ngModel)]="datosRegistro.password">
+          </ion-input>
+          <ion-icon
+            slot="end"
+            [name]="verPassword ? 'eye-off' : 'eye'"
+            class="toggle-icon"
+            (click)="togglePassword('password')">
+          </ion-icon>
+        </ion-item>
+
+        <!-- Repetir contraseña -->
+        <ion-item>
+          <ion-label position="floating">Repetir contraseña</ion-label>
+          <ion-input
+            [type]="verRepetir ? 'text' : 'password'"
+            [(ngModel)]="datosRegistro.repetirPassword">
+          </ion-input>
+          <ion-icon
+            slot="end"
+            [name]="verRepetir ? 'eye-off' : 'eye'"
+            class="toggle-icon"
+            (click)="togglePassword('repetir')">
+          </ion-icon>
+        </ion-item>
+
+        <!-- Rol -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Rol</ion-label>
+          <ion-select [(ngModel)]="datosRegistro.rol" interface="popover">
+            <ion-select-option *ngFor="let rol of rolesDisponibles" [value]="rol">
+              {{ rol | titlecase }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Botón -->
+        <ion-button expand="block" class="ion-margin-top" color="success" (click)="registrar()">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Registrarse
+        </ion-button>
+
+        <!-- Enlace a login -->
+        <ion-text class="ion-text-center ion-margin-top">
+          <p>¿Ya tienes una cuenta? <a routerLink="/auth">Inicia sesión aquí</a></p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
