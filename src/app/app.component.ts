@@ -1,9 +1,8 @@
-// src/app/app.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MenuController } from '@ionic/angular';
-
+import { NotificacionesMovilService } from './servicios/notificaciones-movil'; // Corregir el nombre de la importación
 import { AuthService } from './servicios/auth-service';
 
 @Component({
@@ -12,15 +11,16 @@ import { AuthService } from './servicios/auth-service';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   showShell = false;
   esAdmin = false;
-  esInvestigador = false; // 👈 nuevo flag
+  esInvestigador = false;
 
   constructor(
     public authService: AuthService,
     private router: Router,
-    private menuController: MenuController
+    private menuController: MenuController,
+    private notificacionesMovilService: NotificacionesMovilService // Usar el mismo nombre
   ) {
     console.log('[AppComponent] constructor');
 
@@ -49,10 +49,14 @@ export class AppComponent {
       });
   }
 
+  ngOnInit() {
+    this.notificacionesMovilService.init();
+  }
+
   private definirRol(rol: string) {
     const r = (rol || '').toLowerCase();
     this.esAdmin = r === 'admin' || r === 'administrador';
-    this.esInvestigador = r === 'tecnico'; 
+    this.esInvestigador = r === 'tecnico';
   }
 
   async logout() {

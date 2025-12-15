@@ -1,26 +1,22 @@
-<!-- src/app/paginas/historial/historial.page.html -->
-
 <app-main-header titulo="Historial"></app-main-header>
 
 <ion-content class="historial-content">
   <div class="page-wrapper historial-wrapper">
+
     <!-- ================= RESUMEN SUPERIOR ================= -->
     <div class="summary-grid">
       <div class="summary-card">
         <div class="summary-label">Lecturas</div>
         <div class="summary-value">{{ totalLecturas }}</div>
       </div>
-
       <div class="summary-card">
         <div class="summary-label">Acciones auto</div>
         <div class="summary-value">{{ totalAcciones }}</div>
       </div>
-
       <div class="summary-card alert">
         <div class="summary-label">Alertas</div>
         <div class="summary-value">{{ totalAlertas }}</div>
       </div>
-
       <div class="summary-card">
         <div class="summary-label">Logs</div>
         <div class="summary-value">{{ totalLogs }}</div>
@@ -29,390 +25,174 @@
 
     <!-- ================= CARD PRINCIPAL ================= -->
     <ion-card class="main-card">
-      <!-- Tabs principales -->
+
+      <!-- TABS -->
       <ion-segment [(ngModel)]="tab" (ionChange)="onTabChange($event)" class="main-tabs">
-        <ion-segment-button value="sensores">
-          <ion-label>Sensores</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="acciones">
-          <ion-label>Acciones auto</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="alertas">
-          <ion-label>Alertas</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="logs">
-          <ion-label>Logs</ion-label>
-        </ion-segment-button>
+        <ion-segment-button value="sensores"><ion-label>Sensores</ion-label></ion-segment-button>
+        <ion-segment-button value="acciones"><ion-label>Acciones auto</ion-label></ion-segment-button>
+        <ion-segment-button value="alertas"><ion-label>Alertas</ion-label></ion-segment-button>
+        <ion-segment-button value="logs"><ion-label>Logs</ion-label></ion-segment-button>
       </ion-segment>
 
       <ion-card-content class="main-card-content">
-        <!-- ===================================================== -->
-        <!-- TAB SENSORES                                         -->
-        <!-- ===================================================== -->
+
+        <!-- ================= SENSORES ================= -->
         <ng-container *ngIf="tab === 'sensores'">
-          <div class="layout-2cols">
-            <!-- PANEL DE FILTROS -->
-            <div class="filters-panel">
-              <h2 class="panel-title">Filtros</h2>
 
-              <!-- Fecha -->
-              <div class="filter-block">
-                <label class="filter-label">Fecha</label>
-
-                <div class="date-picker-row">
-                  <ion-datetime-button
-                    datetime="fechaHistorial"
-                    class="date-button"
-                  ></ion-datetime-button>
-
-                  <ion-modal [keepContentsMounted]="true">
-                    <ng-template>
-                      <ion-datetime
-                        id="fechaHistorial"
-                        presentation="date"
-                        [(ngModel)]="fechaISO"
-                        (ionChange)="onCambioFiltrosSensores()"
-                      ></ion-datetime>
-                    </ng-template>
-                  </ion-modal>
-
-                  <span class="date-text">
-                    {{ fechaISO | date: 'dd/MM/yyyy' }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Variable -->
-              <div class="filter-block">
-                <label class="filter-label">Variable</label>
-
-                <div class="var-chips">
-                  <button
-                    type="button"
-                    class="var-chip"
-                    [class.active]="variable === 'temperatura'"
-                    (click)="setVariable('temperatura')"
-                  >
-                    <ion-icon name="thermometer-outline"></ion-icon>
-                    <div>
-                      <span>Temperatura</span>
-                      <small>°C</small>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="var-chip"
-                    [class.active]="variable === 'humedadPromedio'"
-                    (click)="setVariable('humedadPromedio')"
-                  >
-                    <ion-icon name="water-outline"></ion-icon>
-                    <div>
-                      <span>Humedad</span>
-                      <small>% promedio</small>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="var-chip"
-                    [class.active]="variable === 'NH3'"
-                    (click)="setVariable('NH3')"
-                  >
-                    <ion-icon name="flask-outline"></ion-icon>
-                    <div>
-                      <span>NH₃</span>
-                      <small>ppm</small>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="var-chip"
-                    [class.active]="variable === 'CH4'"
-                    (click)="setVariable('CH4')"
-                  >
-                    <ion-icon name="cloud-outline"></ion-icon>
-                    <div>
-                      <span>CH₄</span>
-                      <small>ppm</small>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Descarga -->
-              <div class="filter-block">
-                <label class="filter-label">Descargar informe</label>
-                <ion-button
-                  expand="block"
-                  fill="outline"
-                  size="small"
-                  (click)="descargarSensoresCsv()"
-                >
-                  <ion-icon slot="start" name="download-outline"></ion-icon>
-                  CSV de lecturas
-                </ion-button>
+          <!-- TOPBAR SENSORES -->
+          <div class="tab-topbar">
+            <div class="tab-topbar-left">
+              <div class="tab-title">Sensores</div>
+              <div class="tab-subtitle">
+                {{ etiquetaCache }} · {{ fechaISO | date:'dd/MM/yyyy' }}
               </div>
             </div>
 
-            <!-- PANEL DE DATOS -->
-            <div class="data-panel">
-              <!-- Resumen variable -->
-              <div class="resumen-card">
-                <div class="resumen-header">
-                  <h2>{{ etiquetaVariable }}</h2>
-                  <p *ngIf="(!lecturasFiltradas.length && !lecturas.length)">
-                    No hay lecturas registradas para esta fecha.
-                  </p>
-                  <p *ngIf="lecturasFiltradas.length || lecturas.length">
-                    Resumen diario basado en lecturas disponibles.
-                  </p>
-                </div>
+            <div class="tab-topbar-actions">
+              <ion-button size="small" fill="outline" (click)="descargarSensoresCsv()">
+                <ion-icon slot="start" name="download-outline"></ion-icon>
+                CSV
+              </ion-button>
+              <ion-button size="small" fill="solid" (click)="descargarSensoresPdf()">
+                <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                PDF
+              </ion-button>
+            </div>
+          </div>
 
-                <div class="resumen-grid" *ngIf="lecturasFiltradas.length || lecturas.length">
-                  <div class="resumen-item">
-                    <span class="label">Mínimo</span>
-                    <span class="value">
-                      {{ resumenVariable.min | number: '1.1-1' }}
-                    </span>
-                  </div>
-                  <div class="resumen-item">
-                    <span class="label">Promedio</span>
-                    <span class="value">
-                      {{ resumenVariable.prom | number: '1.1-1' }}
-                    </span>
-                  </div>
-                  <div class="resumen-item">
-                    <span class="label">Máximo</span>
-                    <span class="value">
-                      {{ resumenVariable.max | number: '1.1-1' }}
-                    </span>
-                  </div>
+          <div class="layout-2cols">
+            <!-- FILTROS -->
+            <div class="filters-panel">
+              <div class="filter-block">
+                <label class="filter-label">Fecha</label>
+                <ion-datetime-button datetime="fechaHistorial"></ion-datetime-button>
+
+                <ion-modal [keepContentsMounted]="true" (ionDidDismiss)="onFechaConfirmada()">
+                  <ng-template>
+                    <ion-datetime
+                      id="fechaHistorial"
+                      presentation="date"
+                      [(ngModel)]="fechaISO">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </div>
+
+              <div class="filter-block">
+                <label class="filter-label">Variable</label>
+                <div class="var-chips">
+                  <button class="var-chip" [class.active]="variable==='temperatura'" (click)="setVariable('temperatura')">Temperatura</button>
+                  <button class="var-chip" [class.active]="variable==='humedadPromedio'" (click)="setVariable('humedadPromedio')">Humedad</button>
+                  <button class="var-chip" [class.active]="variable==='NH3'" (click)="setVariable('NH3')">NH₃</button>
+                  <button class="var-chip" [class.active]="variable==='CH4'" (click)="setVariable('CH4')">CH₄</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- DATOS -->
+            <div class="data-panel">
+              <div class="resumen-card">
+                <div class="resumen-grid">
+                  <div class="resumen-item">Min: {{ resumenCache.min }}</div>
+                  <div class="resumen-item">Prom: {{ resumenCache.prom }}</div>
+                  <div class="resumen-item">Max: {{ resumenCache.max }}</div>
                 </div>
               </div>
 
-              <!-- Lista lecturas -->
               <ion-card class="list-card">
-                <ion-card-header>
-                  <ion-card-title>Lecturas del día</ion-card-title>
-                  <ion-card-subtitle>
-                    Valores de temperatura, humedad y gases
-                  </ion-card-subtitle>
-
-                  <ion-buttons slot="end">
-                    <ion-button
-                      fill="clear"
-                      size="small"
-                      (click)="descargarSensoresCsv()"
-                    >
-                      <ion-icon
-                        slot="start"
-                        name="download-outline"
-                      ></ion-icon>
-                      CSV
-                    </ion-button>
-                  </ion-buttons>
-                </ion-card-header>
-
                 <ion-card-content>
-                  <div class="list-state" *ngIf="loadingLecturas">
-                    <ion-spinner></ion-spinner>
-                    <span>Cargando lecturas...</span>
-                  </div>
-
-                  <ion-list *ngIf="!loadingLecturas">
-                    <ion-item *ngIf="!lecturasFiltradas.length && !lecturas.length">
-                      <ion-label>No hay lecturas para mostrar.</ion-label>
-                    </ion-item>
-
-                    <ion-item *ngFor="let l of lecturasFiltradas.length ? lecturasFiltradas : lecturas">
-                      <ion-label>
-                        <h3>{{ getFechaLectura(l) | date: 'short' }}</h3>
-                        <p>
-                          Temp: {{ l.temperatura }} °C ·
-                          Hum: {{ l.humedadPromedio }} % ·
-                          NH₃: {{ l.NH3 }} ppm ·
-                          CH₄: {{ l.CH4 }} ppm
-                        </p>
-                      </ion-label>
-                    </ion-item>
-                  </ion-list>
+                  <ion-item *ngFor="let l of lecturasFiltradas.length ? lecturasFiltradas : lecturas">
+                    <ion-label>
+                      <h3>{{ l.fechaView | date:'short' }}</h3>
+                      <p>
+                        T: {{ l.temperatura }} ·
+                        H: {{ l.humedadPromedio }} ·
+                        NH₃: {{ l.NH3 }} ·
+                        CH₄: {{ l.CH4 }}
+                      </p>
+                    </ion-label>
+                  </ion-item>
                 </ion-card-content>
               </ion-card>
             </div>
           </div>
         </ng-container>
 
-        <!-- ===================================================== -->
-        <!-- TAB ACCIONES AUTO                                     -->
-        <!-- ===================================================== -->
+        <!-- ================= ACCIONES ================= -->
         <ng-container *ngIf="tab === 'acciones'">
+          <div class="tab-topbar">
+            <div>
+              <div class="tab-title">Acciones automáticas</div>
+              <div class="tab-subtitle">Historial lógica difusa</div>
+            </div>
+            <div class="tab-topbar-actions">
+              <ion-button size="small" fill="outline" (click)="descargarAccionesCsv()">CSV</ion-button>
+              <ion-button size="small" fill="solid" (click)="descargarAccionesPdf()">PDF</ion-button>
+            </div>
+          </div>
+
           <ion-card class="list-card">
-            <ion-card-header>
-              <ion-card-title>Acciones automáticas</ion-card-title>
-              <ion-card-subtitle>
-                Historial generado por la lógica difusa
-              </ion-card-subtitle>
-
-              <ion-buttons slot="end">
-                <ion-button
-                  fill="clear"
-                  size="small"
-                  (click)="descargarAccionesCsv()"
-                >
-                  <ion-icon slot="start" name="download-outline"></ion-icon>
-                  CSV
-                </ion-button>
-              </ion-buttons>
-            </ion-card-header>
-
             <ion-card-content>
-              <div class="list-state" *ngIf="loadingAcciones">
-                <ion-spinner></ion-spinner>
-                <span>Cargando acciones...</span>
-              </div>
-
-              <ion-list *ngIf="!loadingAcciones">
-                <ion-item *ngIf="!acciones.length">
-                  <ion-label>No hay acciones registradas.</ion-label>
-                </ion-item>
-
-                <ion-item *ngFor="let a of acciones">
-                  <ion-label>
-                    <h3>{{ a.descripcion }}</h3>
-                    <p>
-                      Estado:
-                      <strong [ngClass]="'estado-' + a.estado">
-                        {{ a.estado }}
-                      </strong>
-                      · Fecha: {{ a.fecha | date: 'short' }}
-                    </p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
+              <ion-item *ngFor="let a of acciones">
+                <ion-label>
+                  <h3>{{ a.descripcion }}</h3>
+                  <p>{{ a.estado }} · {{ a.fecha | date:'short' }}</p>
+                </ion-label>
+              </ion-item>
             </ion-card-content>
           </ion-card>
         </ng-container>
 
-        <!-- ===================================================== -->
-        <!-- TAB ALERTAS                                           -->
-        <!-- ===================================================== -->
+        <!-- ================= ALERTAS ================= -->
         <ng-container *ngIf="tab === 'alertas'">
+          <div class="tab-topbar">
+            <div>
+              <div class="tab-title">Alertas</div>
+              <div class="tab-subtitle">Historial de alertas</div>
+            </div>
+            <div class="tab-topbar-actions">
+              <ion-button size="small" fill="outline" (click)="descargarAlertasCsv()">CSV</ion-button>
+              <ion-button size="small" fill="solid" (click)="descargarAlertasPdf()">PDF</ion-button>
+            </div>
+          </div>
+
           <ion-card class="list-card">
-            <ion-card-header>
-              <ion-card-title>Alertas</ion-card-title>
-              <ion-card-subtitle>
-                Historial de condiciones de riesgo o advertencias
-              </ion-card-subtitle>
-
-              <ion-buttons slot="end">
-                <ion-button
-                  fill="clear"
-                  size="small"
-                  (click)="descargarAlertasCsv()"
-                >
-                  <ion-icon slot="start" name="download-outline"></ion-icon>
-                  CSV
-                </ion-button>
-              </ion-buttons>
-            </ion-card-header>
-
             <ion-card-content>
-              <div class="list-state" *ngIf="loadingAlertas">
-                <ion-spinner></ion-spinner>
-                <span>Cargando alertas...</span>
-              </div>
-
-              <ion-list *ngIf="!loadingAlertas">
-                <ion-item *ngIf="!alertas.length">
-                  <ion-label>No hay alertas registradas.</ion-label>
-                </ion-item>
-
-                <ion-item *ngFor="let a of alertas">
-                  <ion-label>
-                    <h3>
-                      <span
-                        class="badge-alerta"
-                        [ngClass]="{
-                          'badge-danger': a.critico,
-                          'badge-warning': !a.critico
-                        }"
-                      >
-                        {{ a.tipo || (a.critico ? 'danger' : 'warning') }}
-                      </span>
-                      {{ a.descripcion }}
-                    </h3>
-                    <p>
-                      {{ a.fecha | date: 'short' }}
-                      <span *ngIf="!a.leida" class="estado-no-leida">
-                        · No leída
-                      </span>
-                    </p>
-                  </ion-label>
-
-                  <ion-button
-                    *ngIf="!a.leida"
-                    slot="end"
-                    size="small"
-                    fill="outline"
-                    (click)="marcarAlertaLeida(a)"
-                  >
-                    Marcar leída
-                  </ion-button>
-                </ion-item>
-              </ion-list>
+              <ion-item *ngFor="let a of alertas">
+                <ion-label>
+                  <h3>{{ a.descripcion }}</h3>
+                  <p>{{ a.fecha | date:'short' }}</p>
+                </ion-label>
+              </ion-item>
             </ion-card-content>
           </ion-card>
         </ng-container>
 
-        <!-- ===================================================== -->
-        <!-- TAB LOGS                                              -->
-        <!-- ===================================================== -->
+        <!-- ================= LOGS ================= -->
         <ng-container *ngIf="tab === 'logs'">
+          <div class="tab-topbar">
+            <div>
+              <div class="tab-title">Logs</div>
+              <div class="tab-subtitle">Eventos recientes</div>
+            </div>
+            <div class="tab-topbar-actions">
+              <ion-button size="small" fill="outline" (click)="descargarLogsCsv()">CSV</ion-button>
+              <ion-button size="small" fill="solid" (click)="descargarLogsPdf()">PDF</ion-button>
+            </div>
+          </div>
+
           <ion-card class="list-card">
-            <ion-card-header>
-              <ion-card-title>Logs recientes</ion-card-title>
-              <ion-card-subtitle>
-                Últimos 50 eventos registrados
-              </ion-card-subtitle>
-
-              <ion-buttons slot="end">
-                <ion-button
-                  fill="clear"
-                  size="small"
-                  (click)="descargarLogsCsv()"
-                >
-                  <ion-icon slot="start" name="download-outline"></ion-icon>
-                  CSV
-                </ion-button>
-              </ion-buttons>
-            </ion-card-header>
-
             <ion-card-content>
-              <div class="list-state" *ngIf="loadingLogs">
-                <ion-spinner></ion-spinner>
-                <span>Cargando logs...</span>
-              </div>
-
-              <ion-list *ngIf="!loadingLogs">
-                <ion-item *ngIf="!logs.length">
-                  <ion-label>No hay logs para mostrar.</ion-label>
-                </ion-item>
-
-                <ion-item *ngFor="let log of logs">
-                  <ion-label>
-                    <h3>{{ log.accion }}</h3>
-                    <p>{{ log.detalle }}</p>
-                    <p class="log-fecha">
-                      {{ log.fecha | date: 'short' }}
-                    </p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
+              <ion-item *ngFor="let l of logs">
+                <ion-label>
+                  <h3>{{ l.accion }}</h3>
+                  <p>{{ l.detalle }}</p>
+                </ion-label>
+              </ion-item>
             </ion-card-content>
           </ion-card>
         </ng-container>
+
       </ion-card-content>
     </ion-card>
   </div>

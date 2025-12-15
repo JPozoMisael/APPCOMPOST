@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
+import { catchError, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { GeneralService } from './general-service';
 
 export type EstadoAccion = 'pendiente' | 'aplicada' | string;
@@ -10,84 +10,109 @@ export interface AccionAuto {
   descripcion: string;
   estado: EstadoAccion;
   fecha: string | Date;
-  // agrega aquí otros campos si tu API los devuelve (p.ej. autor, dispositivo_id, etc.)
 }
 
 @Injectable({ providedIn: 'root' })
 export class FuzzyService {
-  // Base de rutas (GeneralService ya antepone /api según tu environment)
-  private readonly base = 'fuzzy';           // -> /api/fuzzy
-  private readonly healthPath = 'fuzzy/health'; // -> /api/fuzzy/health (público recomendado)
+  private readonly base = 'fuzzy';
+  private readonly healthPath = 'fuzzy/health';
+  private readonly lastActionPath = `${this.base}/last`;
+
+  /** Store reactivo en memoria */
+  private _store$ = new BehaviorSubject<AccionAuto[]>([]);
+  acciones$ = this._store$.asObservable();
 
   // para cachear el listado y poder refrescar manualmente
   private refresh$ = new BehaviorSubject<void>(undefined);
 
+  private lastActionCache: AccionAuto | null = null;
+  private lastActionCacheValid = false;
+
   constructor(private http: GeneralService) {}
 
-  // Health del módulo (ping simple)
   health(): Observable<{ ok: boolean; [k: string]: any }> {
     return this.http.get<any>(this.healthPath).pipe(
       catchError(() => of({ ok: false }))
     );
   }
 
-  
-  // Listado de acciones (cacheado)
+  /** Sincroniza store desde backend */
   list(): Observable<AccionAuto[]> {
     return this.refresh$.pipe(
       switchMap(() =>
         this.http.get<AccionAuto[]>(this.base).pipe(
           map(arr => (Array.isArray(arr) ? arr : [])),
+          tap(list => this._store$.next(list)),
+          catchError(() => {
+            this._store$.next([]);
+            return of([]);
+          }),
           shareReplay(1)
         )
       )
     );
   }
 
-  // Forzar recarga del listado (invalidar cache)
-  refresh(): void {
-    this.refresh$.next();
+  /** Carga inicial/forzada */
+  loadFromServer(): Observable<AccionAuto[]> {
+    return this.list();
   }
 
-  // Obtener una acción por ID
+  /** Forzar recarga */
+  refresh(): void {
+    this.refresh$.next();
+    this.invalidateLastActionCache();
+  }
+
   getById(id: number): Observable<AccionAuto> {
     return this.http.get<AccionAuto>(`${this.base}/${id}`);
   }
 
-  // Crear nueva acción (admin/técnico)
-  // payload mínimo: { descripcion, estado?, fecha? }
   create(payload: Partial<AccionAuto> & { descripcion: string }): Observable<AccionAuto> {
     return this.http.post<AccionAuto>(this.base, payload).pipe(
-      // tras crear, refresca el cache de list()
-      map(res => {
-        this.refresh();
-        return res;
-      })
+      tap(() => this.refresh()),
+      catchError(() => of(payload as any))
     );
   }
 
-  // Aplicar acción (admin/técnico)
-  // backend: POST /api/fuzzy/aplicar/:id
   apply(id: number): Observable<{ ok: boolean; [k: string]: any }> {
     return this.http.post<{ ok: boolean; [k: string]: any }>(`${this.base}/aplicar/${id}`, {}).pipe(
-      map(res => {
-        this.refresh(); // refresca el listado para reflejar estado 'aplicada'
-        return res;
+      tap(() => this.refresh()),
+      catchError(() => of({ ok: false }))
+    );
+  }
+
+  /** Polling: acciones nuevas cada 10s (ajusta) */
+  accionesCount$ = timer(0, 10000).pipe(
+    switchMap(() => this.list()),
+    map(list => list.length),
+    shareReplay(1)
+  );
+
+  last(): Observable<AccionAuto | null> {
+    if (this.lastActionCacheValid) return of(this.lastActionCache);
+
+    return this.http.get<AccionAuto | null>(this.lastActionPath).pipe(
+      tap(action => {
+        this.lastActionCache = action;
+        this.lastActionCacheValid = true;
+      }),
+      catchError(() => {
+        return this.list().pipe(
+          map(lista => {
+            if (!lista?.length) return null;
+            const sorted = [...lista].sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
+            this.lastActionCache = sorted[0] ?? null;
+            this.lastActionCacheValid = true;
+            return this.lastActionCache;
+          })
+        );
       })
     );
   }
 
-  
-  // Última acción por fecha (o null)
-
-  last(): Observable<AccionAuto | null> {
-    return this.list().pipe(
-      map(lista => {
-        if (!lista?.length) return null;
-        // ordena por fecha descendente
-        const sorted = [...lista].sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
-        return sorted[0] ?? null;
-      })
-    );
+  private invalidateLastActionCache(): void {
+    this.lastActionCacheValid = false;
+    this.lastActionCache = null;
   }
 }

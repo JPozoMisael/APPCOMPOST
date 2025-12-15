@@ -12,14 +12,14 @@
       </div>
 
       <ion-button
-  size="small"
-  fill="clear"
-  (click)="marcarTodasComoLeidas()"
-  *ngIf="hayNoLeidas"
->
-  <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
-  Marcar todas como leídas
-</ion-button>
+        size="small"
+        fill="clear"
+        (click)="marcarTodasComoLeidas()"
+        *ngIf="hayNoLeidas"
+      >
+        <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+        Marcar todas como leídas
+      </ion-button>
 
     </div>
 
@@ -42,6 +42,7 @@
       <ion-card
         *ngFor="let n of notificacionesFiltradas"
         [class.no-leida]="!n.leida"
+        (click)="goToPage(n)"
       >
         <ion-card-header>
           <div class="notif-header">

@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { SensorMuestra } from '../model/sensor-muestra';
 import { Lectura } from '../model/lectura';
@@ -58,7 +59,7 @@ export class DataService {
     private alertasService: AlertasService,   // ✅ inyectamos normal
   ) {
     // Suscripción MQTT (tu servicio devuelve strings JSON)
-    this.mqtt.observe(this.TOPIC).subscribe({
+    this.mqtt.observe(this.TOPIC).pipe(debounceTime(100)).subscribe({ // Ajusta el valor de debounceTime
       next: (raw: string) => {
         this.zone.run(() => {
           try {

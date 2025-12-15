@@ -1,113 +1,205 @@
-/* src/app/paginas/historial/historial.page.scss */
+/* =====================================================
+   HISTORIAL – ESTILO DASHBOARD PROFESIONAL
+   ===================================================== */
 
-/* ===== FONDO GENERAL ===== */
+:host {
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.06);
+
+  --border-soft: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* =====================================================
+   CONTENEDOR GENERAL
+   ===================================================== */
+
 .historial-content {
-  --background: #f4f6fb;
-  background: #f4f6fb;
+  --padding-bottom: 22px;
 }
 
-/* Contenedor principal */
-.historial-wrapper {
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 12px 12px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  color: #111827;
+.page-wrapper {
+  padding: 16px;
 }
 
-/* ================= RESUMEN SUPERIOR ================= */
+/* =====================================================
+   CABECERA / SUMMARY
+   ===================================================== */
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 18px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .summary-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 10px 14px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+  position: relative;
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(245, 247, 250, 0.9)
+  );
+  border: var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 
-.summary-card.alert .summary-value {
-  color: #dc2626;
+  /* línea decorativa superior */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--ion-color-primary),
+      var(--ion-color-primary-tint)
+    );
+  }
+
+  &.alert::before {
+    background: linear-gradient(
+      90deg,
+      var(--ion-color-danger),
+      var(--ion-color-warning)
+    );
+  }
 }
 
 .summary-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  opacity: 0.75;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  color: #6b7280;
 }
 
 .summary-value {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ion-text-color);
 }
 
-/* ================= CARD PRINCIPAL ================= */
+/* =====================================================
+   TARJETA PRINCIPAL
+   ===================================================== */
 
 .main-card {
-  border-radius: 18px;
-  padding-top: 4px;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
 }
 
 .main-tabs {
-  margin: 0 8px 4px;
-  --background: transparent;
+  padding: 10px 12px;
+  border-bottom: var(--border-soft);
 }
 
 .main-card-content {
-  padding-inline: 10px;
+  padding: 0;
 }
 
-/* Layout 2 columnas (sensores) */
+/* =====================================================
+   BARRA SUPERIOR STICKY (TODOS LOS TABS)
+   ===================================================== */
+
+.tab-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(248, 249, 251, 0.96)
+  );
+  backdrop-filter: blur(6px);
+  border-bottom: var(--border-soft);
+  padding: 12px 16px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.tab-topbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tab-title {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.tab-subtitle {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.tab-topbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* =====================================================
+   LAYOUT SENSORES
+   ===================================================== */
 
 .layout-2cols {
   display: grid;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.3fr);
-  gap: 16px;
+  gap: 14px;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 360px 1fr;
+  }
 }
 
-/* ================= PANEL FILTROS ================= */
-
 .filters-panel {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 12px 14px 14px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  padding: 16px;
+  border-right: none;
+
+  @media (min-width: 900px) {
+    border-right: var(--border-soft);
+  }
 }
 
 .panel-title {
-  margin: 0 0 2px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 14px;
 }
 
+/* =====================================================
+   FILTROS
+   ===================================================== */
+
 .filter-block {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  margin-bottom: 16px;
 }
 
 .filter-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #4b5563;
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+  opacity: 0.8;
 }
-
-/* Fecha */
 
 .date-picker-row {
   display: flex;
@@ -115,243 +207,155 @@
   gap: 10px;
 }
 
-.date-button {
-  --background: #eff3ff;
-  --border-radius: 999px;
-  --padding-start: 10px;
-  --padding-end: 10px;
-}
-
 .date-text {
-  font-size: 0.8rem;
-  color: #4b5563;
+  font-size: 12px;
+  opacity: 0.75;
 }
-
-/* Variables como chips */
 
 .var-chips {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  gap: 10px;
 }
 
 .var-chip {
-  width: 100%;
-  border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  padding: 6px 10px;
-  background: #f9fafb;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.var-chip ion-icon {
-  font-size: 1.1rem;
-  color: #16a34a;
-}
-
-.var-chip div span {
-  display: block;
-  font-weight: 600;
-}
-
-.var-chip div small {
-  display: block;
-  font-size: 0.7rem;
-  color: #6b7280;
-}
-
-.var-chip:hover {
-  background: #ecfdf3;
-}
-
-.var-chip.active {
-  background: #dcfce7;
-  border-color: #16a34a;
-  box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.25);
-}
-
-/* ================= PANEL DATOS ================= */
-
-.data-panel {
-  display: flex;
-  flex-direction: column;
   gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: var(--border-soft);
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  ion-icon {
+    font-size: 18px;
+    opacity: 0.8;
+  }
+
+  span {
+    font-weight: 700;
+  }
+
+  small {
+    display: block;
+    font-size: 11px;
+    opacity: 0.65;
+  }
+
+  &:hover {
+    background: rgba(56, 128, 255, 0.08);
+  }
+
+  &.active {
+    background: rgba(56, 128, 255, 0.12);
+    border-color: rgba(56, 128, 255, 0.45);
+  }
 }
 
-/* Resumen de variable */
+/* =====================================================
+   RESUMEN SENSORES
+   ===================================================== */
 
 .resumen-card {
-  background: #e8f7ee;
-  border-radius: 16px;
-  padding: 12px 14px;
-  border: 1px solid rgba(34, 164, 93, 0.25);
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: var(--border-soft);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(245, 247, 250, 0.9)
+  );
+  box-shadow: var(--shadow-card);
+  margin-bottom: 14px;
 }
 
 .resumen-header h2 {
-  margin: 0;
-  font-size: 1rem;
-  color: #14532d;
+  font-size: 15px;
+  font-weight: 900;
+  margin-bottom: 6px;
 }
 
 .resumen-header p {
-  margin: 3px 0 0;
-  font-size: 0.8rem;
-  color: #6b7280;
+  font-size: 12px;
+  opacity: 0.75;
 }
 
 .resumen-grid {
-  margin-top: 8px;
+  margin-top: 14px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .resumen-item {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.03);
   text-align: center;
+
+  .label {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .value {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 900;
+  }
 }
 
-.resumen-item .label {
-  display: block;
-  font-size: 0.72rem;
-  color: #6b7280;
-}
-
-.resumen-item .value {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #16a34a;
-}
-
-/* ================= LISTAS (cards) ================= */
+/* =====================================================
+   LISTAS
+   ===================================================== */
 
 .list-card {
-  border-radius: 16px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-  background: #ffffff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
-
-ion-card-header {
-  padding: 10px 14px 6px;
-}
-
-ion-card-title {
-  font-size: 0.98rem;
-  font-weight: 600;
-}
-
-ion-card-subtitle {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-/* Estado de carga */
 
 .list-state {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: #6b7280;
+  gap: 12px;
+  padding: 10px;
+  opacity: 0.85;
 }
-
-/* Items */
-
-ion-item {
-  --padding-start: 12px;
-  --inner-padding-end: 12px;
-  --min-height: 44px;
-  font-size: 0.85rem;
-}
-
-ion-item h3 {
-  font-size: 0.88rem;
-  margin-bottom: 2px;
-}
-
-ion-item p {
-  font-size: 0.78rem;
-}
-
-/* Fecha en logs */
 
 .log-fecha {
-  font-size: 0.74rem;
-  color: #9ca3af;
+  font-size: 11px;
+  opacity: 0.7;
 }
 
-/* Estados acciones fuzzy */
-
-.estado-pendiente {
-  color: #f97316;
-}
+/* =====================================================
+   ESTADOS Y BADGES
+   ===================================================== */
 
 .estado-aplicada {
-  color: #16a34a;
+  color: var(--ion-color-success);
+  font-weight: 800;
 }
 
-/* Alertas */
+.estado-pendiente {
+  color: var(--ion-color-warning);
+  font-weight: 800;
+}
 
 .badge-alerta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-right: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-right: 8px;
 }
 
 .badge-danger {
-  background: rgba(220, 38, 38, 0.1);
-  color: #b91c1c;
+  background: rgba(235, 68, 90, 0.15);
+  color: var(--ion-color-danger);
 }
 
 .badge-warning {
-  background: rgba(249, 115, 22, 0.1);
-  color: #c05621;
-}
-
-.estado-no-leida {
-  font-size: 0.75rem;
-  color: #b91c1c;
-  font-weight: 600;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 900px) {
-  .summary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .layout-2cols {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .summary-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .resumen-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 420px) {
-  .resumen-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  background: rgba(255, 196, 9, 0.18);
+  color: var(--ion-color-warning);
 }

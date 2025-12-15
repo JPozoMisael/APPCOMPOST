@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "510620662872",
+    "project_id": "appcompost-d66cc",
+    "storage_bucket": "appcompost-d66cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510620662872:android:c63a926afa13d80faf5e2d",
+        "android_client_info": {
+          "package_name": "com.iot.compostera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_VXAW5wmA3teC5zkpisoCVuq4k6C1Ysg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
